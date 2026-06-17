@@ -4,6 +4,17 @@ import { gsap } from 'gsap'
 const projects = useProjects();
 
 const projectCards = ref<HTMLElement[]>([])
+const projectImages = ref<HTMLImageElement[]>([])
+const loadedProjectImages = ref<Record<string, boolean>>({})
+
+useHead({
+  link: projects.map(project => ({
+    rel: 'preload',
+    as: 'image',
+    href: project.image,
+    fetchpriority: 'high'
+  }))
+})
 
 const setProjectCard = (element: Element | null) => {
   if (element instanceof HTMLElement) {
@@ -11,12 +22,29 @@ const setProjectCard = (element: Element | null) => {
   }
 }
 
+const setProjectImage = (element: Element | null) => {
+  if (element instanceof HTMLImageElement) {
+    projectImages.value.push(element)
+  }
+}
+
+const markProjectImageLoaded = (slug: string) => {
+  loadedProjectImages.value[slug] = true
+}
+
 onBeforeUpdate(() => {
   projectCards.value = []
+  projectImages.value = []
 })
 
 onMounted(async () => {
   await nextTick()
+
+  projectImages.value.forEach((image, index) => {
+    if (image.complete && image.naturalWidth > 0) {
+      markProjectImageLoaded(projects[index].slug)
+    }
+  })
 
   gsap.set(projectCards.value, {
     autoAlpha: 0,
@@ -58,9 +86,15 @@ onMounted(async () => {
               
             </div>
             <img
-              class="absolute top-0 left-0 h-full w-full object-cover opacity-60 transition-transform duration-[800ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-[1.025]"
+              :ref="setProjectImage"
+              class="absolute top-0 left-0 h-full w-full object-cover transition-[opacity,transform] duration-[800ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-[1.025]"
+              :class="loadedProjectImages[project.slug] ? 'opacity-60' : 'opacity-0'"
               :src="project.image"
               :alt="project.name"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+              @load="markProjectImageLoaded(project.slug)"
             />
           </div>
 

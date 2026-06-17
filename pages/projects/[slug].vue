@@ -15,11 +15,25 @@ useSeoMeta({
 
 const downloaded = ref<string | null>(null)
 const materialCards = ref<HTMLElement[]>([])
+const loadedMaterialImages = ref<Record<string, boolean>>({})
+
+useHead({
+  link: project.materials.slice(0, 3).map(material => ({
+    rel: 'preload',
+    as: 'image',
+    href: material.image,
+    fetchpriority: 'high'
+  }))
+})
 
 const setMaterialCard = (element: Element | null) => {
   if (element instanceof HTMLElement) {
     materialCards.value.push(element)
   }
+}
+
+const markMaterialImageLoaded = (title: string) => {
+  loadedMaterialImages.value[title] = true
 }
 
 onBeforeUpdate(() => {
@@ -92,9 +106,14 @@ const download = (title: string) => {
           @click="download(material.title)"
         >
           <img
-            class="absolute inset-0 h-full w-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-[1.025]"
+            class="absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[800ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-[1.025]"
+            :class="loadedMaterialImages[material.title] ? 'opacity-100' : 'opacity-0'"
             :src="material.image"
             :alt="material.title"
+            :loading="index < 3 ? 'eager' : 'lazy'"
+            decoding="async"
+            :fetchpriority="index < 3 ? 'high' : 'auto'"
+            @load="markMaterialImageLoaded(material.title)"
           >
           <span class="pointer-events-none absolute inset-0 bg-[linear-gradient(#fff0,#01193b)] opacity-[.42]" />
           <!-- <span class="relative z-[1] text-[9px] tracking-[.1em] opacity-55">0{{ index + 1 }}</span> -->
