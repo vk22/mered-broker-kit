@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'MERED | Broker Kit',
+      link: [{ rel: "icon", type: "image/png", href: "/favicon.png" }],
       meta: [
         {
           name: 'description',
