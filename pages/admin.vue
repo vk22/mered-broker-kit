@@ -7,18 +7,28 @@
           <h1 class="font-serif text-5xl leading-none">Projects materials</h1>
         </div>
 
-        <select
-          v-model="selectedSlug"
-          class="h-11 min-w-[220px] border border-black/20 bg-white px-3 text-sm"
-        >
-          <option
-            v-for="project in projects"
-            :key="project.slug"
-            :value="project.slug"
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <select
+            v-model="selectedSlug"
+            class="h-11 min-w-[220px] border border-black/20 bg-white px-3 text-sm"
           >
-            {{ project.name }}
-          </option>
-        </select>
+            <option
+              v-for="project in projects"
+              :key="project.slug"
+              :value="project.slug"
+            >
+              {{ project.name }}
+            </option>
+          </select>
+
+          <button
+            class="h-11 border border-black/20 bg-white px-4 text-sm uppercase tracking-[.12em]"
+            type="button"
+            @click="logout"
+          >
+            Log out
+          </button>
+        </div>
       </div>
 
       <p
@@ -262,5 +272,11 @@ const removeMaterial = async (material: Material) => {
   await refresh();
   showMessage("Material deleted");
 };
-</script>
 
+const logout = async () => {
+  await $fetch("/api/admin/logout", {
+    method: "POST",
+  });
+  await navigateTo("/login");
+};
+</script>
