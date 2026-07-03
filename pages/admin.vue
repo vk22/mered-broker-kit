@@ -57,6 +57,20 @@
               v-model="selectedProject[field.key]"
               class="h-10 border border-black/15 px-3"
             >
+            <input
+              v-if="isProjectUploadField(field.key)"
+              class="text-sm file:mr-3 file:h-9 file:border-0 file:bg-[#171816] file:px-3 file:text-xs file:uppercase file:tracking-[.12em] file:text-white"
+              accept="image/*"
+              type="file"
+              :disabled="uploading[projectUploadKey(field.key)]"
+              @change="uploadProjectImage(field.key, $event)"
+            >
+            <span
+              v-if="uploading[projectUploadKey(field.key)]"
+              class="text-xs uppercase tracking-[.12em] text-black/50"
+            >
+              Uploading
+            </span>
           </label>
 
           <button
@@ -96,6 +110,20 @@
                 v-model="material[field.key]"
                 class="h-10 border border-black/15 px-3"
               >
+              <input
+                v-if="field.key === 'image'"
+                class="text-sm file:mr-3 file:h-9 file:border-0 file:bg-[#171816] file:px-3 file:text-xs file:uppercase file:tracking-[.12em] file:text-white"
+                accept="image/*"
+                type="file"
+                :disabled="uploading[materialUploadKey(material)]"
+                @change="uploadMaterialImage(material, $event)"
+              >
+              <span
+                v-if="field.key === 'image' && uploading[materialUploadKey(material)]"
+                class="text-xs uppercase tracking-[.12em] text-black/50"
+              >
+                Uploading
+              </span>
             </label>
 
             <label class="grid gap-1 text-sm">
@@ -195,6 +223,7 @@ const { data: projects, refresh } = await useFetch<Project[]>("/api/projects", {
 
 const selectedSlug = ref(projects.value[0]?.slug ?? "");
 const message = ref("");
+const uploading = ref<Record<string, boolean>>({});
 
 const selectedProject = computed(() =>
   projects.value.find((project) => project.slug === selectedSlug.value),
@@ -205,6 +234,85 @@ const showMessage = (text: string) => {
   window.setTimeout(() => {
     message.value = "";
   }, 2500);
+};
+
+const isProjectUploadField = (
+  key: keyof Omit<Project, "id" | "slug" | "materials">,
+) => ["image", "logo", "logo2"].includes(key);
+
+const projectUploadKey = (key: string) => `project:${key}`;
+
+const materialUploadKey = (material: Material) =>
+  `material:${material.id ?? material.title}`;
+
+const uploadImage = async (file: File, folder: string) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("folder", folder);
+
+  return $fetch<{ url: string }>("/api/admin/upload", {
+    method: "POST",
+    body: formData,
+  });
+};
+
+const resetFileInput = (event: Event) => {
+  if (event.target instanceof HTMLInputElement) {
+    event.target.value = "";
+  }
+};
+
+const uploadProjectImage = async (
+  key: keyof Omit<Project, "id" | "slug" | "materials">,
+  event: Event,
+) => {
+  const input = event.target;
+
+  if (!(input instanceof HTMLInputElement) || !input.files?.[0] || !selectedProject.value) {
+    return;
+  }
+
+  const uploadKey = projectUploadKey(key);
+  uploading.value[uploadKey] = true;
+
+  try {
+    const blob = await uploadImage(
+      input.files[0],
+      `${selectedProject.value.slug}/${String(key)}`,
+    );
+    selectedProject.value[key] = blob.url;
+    showMessage("Image uploaded. Save project to keep it.");
+  } catch {
+    showMessage("Image upload failed");
+  } finally {
+    uploading.value[uploadKey] = false;
+    resetFileInput(event);
+  }
+};
+
+const uploadMaterialImage = async (material: Material, event: Event) => {
+  const input = event.target;
+
+  if (!(input instanceof HTMLInputElement) || !input.files?.[0] || !selectedProject.value) {
+    return;
+  }
+
+  const uploadKey = materialUploadKey(material);
+  uploading.value[uploadKey] = true;
+
+  try {
+    const blob = await uploadImage(
+      input.files[0],
+      `${selectedProject.value.slug}/materials`,
+    );
+    material.image = blob.url;
+    showMessage("Image uploaded. Save material to keep it.");
+  } catch {
+    showMessage("Image upload failed");
+  } finally {
+    uploading.value[uploadKey] = false;
+    resetFileInput(event);
+  }
 };
 
 const saveProject = async () => {
