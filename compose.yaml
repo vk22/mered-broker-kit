@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: mered-broker-kit-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mered_broker_kit
+      POSTGRES_USER: mered
+      POSTGRES_PASSWORD: mered_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mered -d mered_broker_kit"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres-data:

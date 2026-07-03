@@ -1,73 +1,10 @@
-<script setup lang="ts">
-import { gsap } from 'gsap'
-
-const projects = useProjects();
-
-const projectCards = ref<HTMLElement[]>([])
-const projectImages = ref<HTMLImageElement[]>([])
-const loadedProjectImages = ref<Record<string, boolean>>({})
-
-useHead({
-  link: projects.map(project => ({
-    rel: 'preload',
-    as: 'image',
-    href: project.image,
-    fetchpriority: 'high'
-  }))
-})
-
-const setProjectCard = (element: Element | null) => {
-  if (element instanceof HTMLElement) {
-    projectCards.value.push(element)
-  }
-}
-
-const setProjectImage = (element: Element | null) => {
-  if (element instanceof HTMLImageElement) {
-    projectImages.value.push(element)
-  }
-}
-
-const markProjectImageLoaded = (slug: string) => {
-  loadedProjectImages.value[slug] = true
-}
-
-onBeforeUpdate(() => {
-  projectCards.value = []
-  projectImages.value = []
-})
-
-onMounted(async () => {
-  await nextTick()
-
-  projectImages.value.forEach((image, index) => {
-    if (image.complete && image.naturalWidth > 0) {
-      markProjectImageLoaded(projects[index].slug)
-    }
-  })
-
-  gsap.set(projectCards.value, {
-    autoAlpha: 0,
-    y: 20
-  })
-
-  gsap.to(projectCards.value, {
-    autoAlpha: 1,
-    y: 0,
-    duration: 1.25,
-    ease: 'power3.out',
-    stagger: 0.15
-  })
-})
-</script>
-
 <template>
   <main>
     <section
       id="projects"
-      class="flex w-full h-screen relative bg-[#252828]"
+      class="flex w-full h-dvh relative bg-[#252828]"
     >
-      <div class="flex flex-col basis-full md:flex-row w-full h-screen">
+      <div class="flex flex-col basis-full md:flex-row w-full h-[calc(100dvh-125px)] ">
         <NuxtLink
           v-for="(project, index) in projects"
           :key="project.slug"
@@ -76,7 +13,7 @@ onMounted(async () => {
         >
           <div
             :ref="setProjectCard"
-            class="relative flex h-full w-full items-center justify-center overflow-hidden"
+            class="relative flex h-full w-full items-center justify-center overflow-hidden "
           >
             <div class="relative z-[999] text-white flex flex-col h-full items-center justify-center text-center">
               <img :src="`${project.logo}`"alt="" class="w-[40vw] md:w-[20vw]">
@@ -121,3 +58,70 @@ onMounted(async () => {
     </section>
   </main>
 </template>
+
+
+<script setup lang="ts">
+import { gsap } from 'gsap'
+import type { Project } from '~/data/projects'
+
+const { data: projects } = await useFetch<Project[]>('/api/projects', {
+  default: () => []
+})
+
+const projectCards = ref<HTMLElement[]>([])
+const projectImages = ref<HTMLImageElement[]>([])
+const loadedProjectImages = ref<Record<string, boolean>>({})
+
+useHead({
+  link: projects.value.map(project => ({
+    rel: 'preload',
+    as: 'image',
+    href: project.image,
+    fetchpriority: 'high'
+  }))
+})
+
+const setProjectCard = (element: Element | null) => {
+  if (element instanceof HTMLElement) {
+    projectCards.value.push(element)
+  }
+}
+
+const setProjectImage = (element: Element | null) => {
+  if (element instanceof HTMLImageElement) {
+    projectImages.value.push(element)
+  }
+}
+
+const markProjectImageLoaded = (slug: string) => {
+  loadedProjectImages.value[slug] = true
+}
+
+onBeforeUpdate(() => {
+  projectCards.value = []
+  projectImages.value = []
+})
+
+onMounted(async () => {
+  await nextTick()
+
+  projectImages.value.forEach((image, index) => {
+    if (image.complete && image.naturalWidth > 0) {
+      markProjectImageLoaded(projects.value[index].slug)
+    }
+  })
+
+  gsap.set(projectCards.value, {
+    autoAlpha: 0,
+    y: 20
+  })
+
+  gsap.to(projectCards.value, {
+    autoAlpha: 1,
+    y: 0,
+    duration: 1.25,
+    ease: 'power3.out',
+    stagger: 0.15
+  })
+})
+</script>
