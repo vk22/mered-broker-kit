@@ -56,6 +56,6 @@
   }
 
   body {
-    @apply bg-paper font-sans text-ink antialiased;
+    @apply bg-[#252828] font-sans text-ink antialiased;
   }
 }

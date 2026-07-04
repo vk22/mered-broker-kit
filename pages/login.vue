@@ -1,11 +1,8 @@
 <template>
-  <main class="min-h-[calc(100dvh-100px)] bg-[#f4f1eb] px-5 py-12 text-[#171816] md:min-h-[calc(100dvh-125px)]">
-    <section class="mx-auto flex min-h-[520px] max-w-md flex-col justify-center">
+  <main class="min-h-[calc(100dvh-100px)] bg-transparent px-5 py-12 text-[#171816] md:min-h-[calc(100dvh-125px)]">
+    <section class="mx-auto flex min-h-[520px] max-w-sm flex-col justify-center">
       <div class="border border-black/15 bg-white p-6 md:p-8">
-        <p class="mb-3 text-xs uppercase tracking-[.18em] text-black/50">
-          Admin
-        </p>
-        <h1 class="mb-8 font-serif text-5xl leading-none">Sign in</h1>
+        <h1 class="mb-8 font-serif text-2xl leading-none">Sign in</h1>
 
         <form class="flex flex-col gap-4" @submit.prevent="login">
           <label class="grid gap-1 text-sm">
@@ -39,7 +36,7 @@
           </p>
 
           <button
-            class="mt-2 h-11 bg-[#171816] px-4 text-sm uppercase tracking-[.12em] text-white disabled:opacity-50"
+            class="mt-2 h-11 bg-[#282828] px-4 text-sm uppercase tracking-[.12em] text-white disabled:opacity-50"
             :disabled="pending"
             type="submit"
           >

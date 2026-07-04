@@ -1,16 +1,18 @@
 <template>
-  <main class="min-h-dvh bg-[#f4f1eb] px-5 py-8 text-[#171816] md:px-10">
-    <section class="mx-auto flex max-w-7xl flex-col gap-8">
-      <div class="flex flex-col gap-4 border-b border-black/15 pb-6 md:flex-row md:items-end md:justify-between">
+  <main class="min-h-dvh bg-[#282828] px-5 py-8 text-[#171816] md:px-10">
+    <section class="mx-auto flex max-w-5xl flex-col gap-8">
+      <div
+        class="flex flex-col gap-4 border-b border-black/15 pb-6 md:flex-row md:items-end md:justify-between"
+      >
         <div>
-          <p class="text-xs uppercase tracking-[.18em] text-black/50">Admin</p>
-          <h1 class="font-serif text-5xl leading-none">Projects materials</h1>
+          <h1 class="font-serif text-5xl leading-none text-white">Projects materials</h1>
         </div>
 
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center bg-[#232323] pr-4 rounded-full overflow-hidden border border-black/20">
+
           <select
             v-model="selectedSlug"
-            class="h-11 min-w-[220px] border border-black/20 bg-white px-3 text-sm"
+            class="h-11 min-w-[220px] text-white bg-[#232323] px-3 text-md font-semibold focus:outline-none"
           >
             <option
               v-for="project in projects"
@@ -20,14 +22,6 @@
               {{ project.name }}
             </option>
           </select>
-
-          <button
-            class="h-11 border border-black/20 bg-white px-4 text-sm uppercase tracking-[.12em]"
-            type="button"
-            @click="logout"
-          >
-            Log out
-          </button>
         </div>
       </div>
 
@@ -38,15 +32,24 @@
         {{ message }}
       </p>
 
-      <section v-if="selectedProject" class="grid gap-8 lg:grid-cols-[360px_1fr]">
+      <section
+        v-if="selectedProject"
+        class="grid gap-8 lg:grid-cols-[360px_1fr]"
+      >
         <form
-          class="flex flex-col gap-4 border border-black/15 bg-white p-5"
+          class="flex flex-col gap-4 bg-white p-7"
           @submit.prevent="saveProject"
         >
           <h2 class="font-serif text-3xl leading-none">Project</h2>
 
-          <label v-for="field in projectFields" :key="field.key" class="grid gap-1 text-sm">
-            <span class="text-xs uppercase tracking-[.12em] text-black/50">{{ field.label }}</span>
+          <label
+            v-for="field in projectFields"
+            :key="field.key"
+            class="grid gap-1 text-sm"
+          >
+            <span class="text-xs uppercase tracking-[.12em] text-black/50">{{
+              field.label
+            }}</span>
             <textarea
               v-if="field.multiline"
               v-model="selectedProject[field.key]"
@@ -56,7 +59,7 @@
               v-else
               v-model="selectedProject[field.key]"
               class="h-10 border border-black/15 px-3"
-            >
+            />
             <input
               v-if="isProjectUploadField(field.key)"
               class="text-sm file:mr-3 file:h-9 file:border-0 file:bg-[#171816] file:px-3 file:text-xs file:uppercase file:tracking-[.12em] file:text-white"
@@ -64,7 +67,7 @@
               type="file"
               :disabled="uploading[projectUploadKey(field.key)]"
               @change="uploadProjectImage(field.key, $event)"
-            >
+            />
             <span
               v-if="uploading[projectUploadKey(field.key)]"
               class="text-xs uppercase tracking-[.12em] text-black/50"
@@ -83,7 +86,7 @@
 
         <div class="flex flex-col gap-5">
           <div class="flex items-center justify-between">
-            <h2 class="font-serif text-3xl leading-none">Materials</h2>
+            <h2 class="font-serif text-3xl text-white leading-none">Materials</h2>
             <button
               class="h-10 border border-black/20 bg-white px-4 text-sm uppercase tracking-[.12em]"
               type="button"
@@ -96,7 +99,7 @@
           <form
             v-for="material in selectedProject.materials"
             :key="material.id ?? material.title"
-            class="grid gap-4 border border-black/15 bg-white p-5 md:grid-cols-2"
+            class="grid gap-4  bg-white p-7 md:grid-cols-2"
             @submit.prevent="saveMaterial(material)"
           >
             <label
@@ -105,11 +108,13 @@
               class="grid gap-1 text-sm"
               :class="field.wide ? 'md:col-span-2' : ''"
             >
-              <span class="text-xs uppercase tracking-[.12em] text-black/50">{{ field.label }}</span>
+              <span class="text-xs uppercase tracking-[.12em] text-black/50">{{
+                field.label
+              }}</span>
               <input
                 v-model="material[field.key]"
                 class="h-10 border border-black/15 px-3"
-              >
+              />
               <input
                 v-if="field.key === 'image'"
                 class="text-sm file:mr-3 file:h-9 file:border-0 file:bg-[#171816] file:px-3 file:text-xs file:uppercase file:tracking-[.12em] file:text-white"
@@ -117,9 +122,12 @@
                 type="file"
                 :disabled="uploading[materialUploadKey(material)]"
                 @change="uploadMaterialImage(material, $event)"
-              >
+              />
               <span
-                v-if="field.key === 'image' && uploading[materialUploadKey(material)]"
+                v-if="
+                  field.key === 'image' &&
+                  uploading[materialUploadKey(material)]
+                "
                 class="text-xs uppercase tracking-[.12em] text-black/50"
               >
                 Uploading
@@ -127,7 +135,9 @@
             </label>
 
             <label class="grid gap-1 text-sm">
-              <span class="text-xs uppercase tracking-[.12em] text-black/50">Icon</span>
+              <span class="text-xs uppercase tracking-[.12em] text-black/50"
+                >Icon</span
+              >
               <select
                 v-model="material.icon"
                 class="h-10 border border-black/15 bg-white px-3"
@@ -139,12 +149,14 @@
             </label>
 
             <label class="grid gap-1 text-sm">
-              <span class="text-xs uppercase tracking-[.12em] text-black/50">Order</span>
+              <span class="text-xs uppercase tracking-[.12em] text-black/50"
+                >Order</span
+              >
               <input
                 v-model.number="material.sortOrder"
                 class="h-10 border border-black/15 px-3"
                 type="number"
-              >
+              />
             </label>
 
             <div class="flex gap-3 md:col-span-2">
@@ -268,7 +280,11 @@ const uploadProjectImage = async (
 ) => {
   const input = event.target;
 
-  if (!(input instanceof HTMLInputElement) || !input.files?.[0] || !selectedProject.value) {
+  if (
+    !(input instanceof HTMLInputElement) ||
+    !input.files?.[0] ||
+    !selectedProject.value
+  ) {
     return;
   }
 
@@ -293,7 +309,11 @@ const uploadProjectImage = async (
 const uploadMaterialImage = async (material: Material, event: Event) => {
   const input = event.target;
 
-  if (!(input instanceof HTMLInputElement) || !input.files?.[0] || !selectedProject.value) {
+  if (
+    !(input instanceof HTMLInputElement) ||
+    !input.files?.[0] ||
+    !selectedProject.value
+  ) {
     return;
   }
 
@@ -381,10 +401,5 @@ const removeMaterial = async (material: Material) => {
   showMessage("Material deleted");
 };
 
-const logout = async () => {
-  await $fetch("/api/admin/logout", {
-    method: "POST",
-  });
-  await navigateTo("/login");
-};
+
 </script>

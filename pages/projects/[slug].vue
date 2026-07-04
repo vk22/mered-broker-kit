@@ -11,7 +11,7 @@
     </section>
 
     <section class="h-[calc(100dvh-125px)] bg-[#252828] ">
-      <div class="grid h-full grid-cols-1 md:grid-cols-6 md:auto-rows-fr ">
+      <div class="grid h-full grid-cols-1 md:grid-cols-6 md:auto-rows-fr gap-4 px-4">
         <button
           v-for="(material, index) in project.materials"
           :key="material.title"
@@ -19,7 +19,7 @@
           :class="materialCardClass(index)"
           class="group relative flex h-[175px] flex-col justify-between cursor-pointer overflow-hidden p-6 md:p-8 text-left text-white md:h-full "
           type="button"
-          @click="download(material)"
+          @click="download(material.title)"
         >
           <img
             class="absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[800ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-[1.025]"
@@ -80,7 +80,7 @@
 <script setup lang="ts">
 import { gsap } from "gsap";
 import { FileText, Image, CirclePlay, Rotate3d, Video, Eye } from "lucide-vue-next";
-import type { Material, Project } from "~/data/projects";
+import type { Project } from "~/data/projects";
 
 const materialIcons = {
   FileText,
@@ -174,13 +174,8 @@ onMounted(async () => {
   });
 });
 
-const download = (material: Material) => {
-  if (material.fileUrl) {
-    window.open(material.fileUrl, "_blank", "noopener,noreferrer");
-    return;
-  }
-
-  downloaded.value = material.title;
+const download = (title: string) => {
+  downloaded.value = title;
   window.setTimeout(() => {
     downloaded.value = null;
   }, 1800);

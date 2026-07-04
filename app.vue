@@ -3,20 +3,34 @@
     <header
       class="relative inset-x-0 top-0 z-20 flex h-[100px] flex-row gap-3 items-center justify-center bg-[#252828] px-5 md:h-[125px] md:px-[2vw]"
     >
-    <div class="flex flex-col gap-2 justify-center items-center">
-      <NuxtLink class="" to="/">
-        <img
-          ref="headerLogoElement"
-          :src="displayedHeaderLogo"
-          :alt="displayedHeaderLogoAlt"
-          class="w-[185px] shadow-sm"
-        />
-      </NuxtLink>
-      <p class="text-white text-sm tracking-wider">Brokers Media Kit</p>
-    </div>
+      <div class="flex flex-col gap-2 justify-center items-center">
+        <NuxtLink class="" to="/">
+          <img
+            ref="headerLogoElement"
+            :src="displayedHeaderLogo"
+            :alt="displayedHeaderLogoAlt"
+            class="w-[185px] shadow-sm"
+          />
+        </NuxtLink>
+        <p class="text-white text-sm tracking-wider">Brokers Media Kit</p>
+      </div>
 
       <div class="absolute right-0 top-0 h-full flex p-4 items-center">
-        <button class="text-white text-[.95rem] tracking-[.1rem]  bg-[#333] px-3.5 py-3 rounded-0 uppercase">Register Your Agency</button>
+        <button
+          v-if="!isNotFront"
+          class="text-white text-[.95rem] tracking-[.1rem] bg-[#333] px-3.5 py-3 rounded-0 uppercase"
+        >
+          Register Your Agency
+        </button>
+
+        <button
+          v-if="isAdmin"
+          class="h-11 border border-black/20 bg-white px-4 text-[.95rem] tracking-[.1rem] uppercase"
+          type="button"
+          @click="logout"
+        >
+          Log out
+        </button>
       </div>
     </header>
 
@@ -44,8 +58,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed, ref } from "vue";
 import { gsap } from "gsap";
 import meredLogo from "~/assets/img/mered-logo.svg";
+import { useRoute } from "vue-router";
 
 const menuOpen = ref(false);
 const route = useRoute();
@@ -63,6 +79,12 @@ const headerProject = computed(() => {
 
 const headerLogo = computed(() => headerProject.value?.logo2 ?? meredLogo);
 const headerLogoAlt = computed(() => headerProject.value?.name ?? "MERED");
+const isAdmin = computed(
+  () => route.path === "/admin",
+);
+const isNotFront = computed(
+  () => route.path === "/admin" || route.path === "/login",
+);
 const displayedHeaderLogo = ref(headerLogo.value);
 const displayedHeaderLogoAlt = ref(headerLogoAlt.value);
 
@@ -112,4 +134,11 @@ watch(headerLogo, async (nextLogo, previousLogo) => {
     },
   );
 });
+
+const logout = async () => {
+  await $fetch("/api/admin/logout", {
+    method: "POST",
+  });
+  await navigateTo("/login");
+};
 </script>
