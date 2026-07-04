@@ -1,24 +1,35 @@
 <template>
   <div>
     <header
-      class="relative inset-x-0 top-0 z-20 flex h-[100px] flex-row gap-3 items-center justify-center bg-[#252828] px-5 md:h-[125px] md:px-[2vw]"
+      class="relative inset-x-0 top-0 z-20 flex h-[100px] flex-row gap-3 items-center justify-between bg-[#252828] px-5 md:h-[125px] md:px-[2vw]"
     >
+    <div class="w-[33%]">
+      <NuxtLink
+        v-if="headerProject"
+        class="relative z-[2] text-[12px] uppercase tracking-[.14em] text-white"
+        to="/"
+        ><span class="text-[18px] pr-2">←</span> All projects</NuxtLink
+      >
+    </div>
+
       <div class="flex flex-col gap-2 justify-center items-center">
         <NuxtLink class="" to="/">
           <img
             ref="headerLogoElement"
             :src="displayedHeaderLogo"
             :alt="displayedHeaderLogoAlt"
-            class="w-[185px] shadow-sm"
+            class="w-[165px] shadow-sm"
           />
         </NuxtLink>
-        <p class="text-white text-sm tracking-wider">Brokers Media Kit</p>
+        <p class="text-white/50 text-sm tracking-wider">Brokers Media Kit</p>
       </div>
 
-      <div class="absolute right-0 top-0 h-full flex p-4 items-center">
+      <div class="w-[33%] flex justify-end h-full flex p-0 items-center">
         <button
           v-if="!isNotFront"
-          class="text-white text-[.95rem] tracking-[.1rem] bg-[#333] px-3.5 py-3 rounded-0 uppercase"
+          class="h-12 bg-transparent border border-white/80 text-[#fff] text-[.85rem] tracking-[.1rem] bg-[#fff] px-4 rounded-0 uppercase"
+          type="button"
+          @click="openAgencyModal"
         >
           Register Your Agency
         </button>
@@ -35,6 +46,11 @@
     </header>
 
     <NuxtPage />
+
+    <AgencyRegisterModal
+      v-if="agencyModalOpen"
+      @close="agencyModalOpen = false"
+    />
 
     <footer
       class="block bg-[#252828] px-5 pb-[35px] pt-[70px] text-white md:grid md:grid-cols-1 md:gap-0 md:p-[7vw] md:pb-[45px] md:pt-[15px]"
@@ -79,14 +95,13 @@ const headerProject = computed(() => {
 
 const headerLogo = computed(() => headerProject.value?.logo2 ?? meredLogo);
 const headerLogoAlt = computed(() => headerProject.value?.name ?? "MERED");
-const isAdmin = computed(
-  () => route.path === "/admin",
-);
+const isAdmin = computed(() => route.path === "/admin");
 const isNotFront = computed(
   () => route.path === "/admin" || route.path === "/login",
 );
 const displayedHeaderLogo = ref(headerLogo.value);
 const displayedHeaderLogoAlt = ref(headerLogoAlt.value);
+const agencyModalOpen = ref(false);
 
 watch(
   () => route.fullPath,
@@ -140,5 +155,9 @@ const logout = async () => {
     method: "POST",
   });
   await navigateTo("/login");
+};
+
+const openAgencyModal = () => {
+  agencyModalOpen.value = true;
 };
 </script>

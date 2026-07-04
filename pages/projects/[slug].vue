@@ -1,17 +1,8 @@
 <template>
   <main>
-    <section
-      class="absolute z-[999px] top-0 h-[25svh] min-h-[320px] overflow-hidden text-white md:min-h-[300px]"
-    >
-      <NuxtLink
-        class="absolute left-5 top-[100px] z-[2] text-[10px] uppercase tracking-[.14em] md:left-[4vw] md:top-[125px]"
-        to="/"
-        >← All projects</NuxtLink
-      >
-    </section>
 
     <section class="h-[calc(100dvh-125px)] bg-[#252828] ">
-      <div class="grid h-full grid-cols-1 md:grid-cols-6 md:auto-rows-fr gap-4 px-4">
+      <div class="grid h-full grid-cols-1 md:grid-cols-6 md:auto-rows-fr gap-4 px-[2vw]">
         <button
           v-for="(material, index) in project.materials"
           :key="material.title"
