@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "db:migrate": "node scripts/run-sql-file.mjs db/migrations/001_projects_materials.sql",
+    "db:migrate": "node scripts/run-sql-file.mjs db/migrations",
     "db:seed": "node scripts/run-sql-file.mjs db/seeds/001_projects_materials.sql",
     "dev": "nuxt dev",
     "generate": "nuxt generate",

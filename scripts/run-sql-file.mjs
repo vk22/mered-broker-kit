@@ -30,7 +30,7 @@ const loadDotEnv = async () => {
 const [, , filePath] = process.argv;
 
 if (!filePath) {
-  console.error("Usage: node scripts/run-sql-file.mjs <file.sql>");
+  console.error("Usage: node scripts/run-sql-file.mjs <file.sql|directory>");
   process.exit(1);
 }
 
@@ -51,10 +51,21 @@ const client = new Client({
 });
 
 try {
-  const sql = await fs.readFile(filePath, "utf8");
+  const stat = await fs.stat(filePath);
+  const files = stat.isDirectory()
+    ? (await fs.readdir(filePath))
+        .filter((name) => name.endsWith(".sql"))
+        .sort()
+        .map((name) => `${filePath.replace(/\/$/, "")}/${name}`)
+    : [filePath];
+
   await client.connect();
-  await client.query(sql);
-  console.log(`Applied ${filePath}`);
+
+  for (const file of files) {
+    const sql = await fs.readFile(file, "utf8");
+    await client.query(sql);
+    console.log(`Applied ${file}`);
+  }
 } finally {
   await client.end();
 }

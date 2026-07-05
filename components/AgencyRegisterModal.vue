@@ -12,9 +12,9 @@
         aria-modal="true"
         aria-labelledby="agency-form-title"
       >
-        <div class="mb-7 flex items-start justify-between gap-6">
+        <div class="mb-7 flex items-start justify-center gap-6">
           <div class="pb-8">
-            <h2 id="agency-form-title" class="font-serif text-5xl leading-none text-[#ebebeb] font-thin">
+            <h2 id="agency-form-title" class="font-serif text-6xl leading-none text-[#ebebeb] font-thin text-center">
               Register <br> your agency
             </h2>
           </div>
@@ -92,9 +92,10 @@
 
           <button
             class="mt-2 h-12 bg-transparent border border-white/80 px-4 text-sm uppercase tracking-[.12em] text-white"
+            :disabled="pending"
             type="submit"
           >
-            Submit
+            {{ pending ? "Submitting" : "Submit" }}
           </button>
         </form>
       </section>
@@ -112,6 +113,7 @@ const emit = defineEmits<{
 const overlayElement = ref<HTMLElement | null>(null);
 const dialogElement = ref<HTMLElement | null>(null);
 const formMessage = ref("");
+const pending = ref(false);
 const form = ref({
   company: "",
   tel: "",
@@ -142,14 +144,27 @@ const close = async () => {
   emit("close");
 };
 
-const submitForm = () => {
-  formMessage.value = "Thank you. We will contact you shortly.";
-  form.value = {
-    company: "",
-    tel: "",
-    email: "",
-    message: "",
-  };
+const submitForm = async () => {
+  pending.value = true;
+  formMessage.value = "";
+
+  try {
+    await $fetch("/api/agency-leads", {
+      method: "POST",
+      body: form.value,
+    });
+    formMessage.value = "Thank you. We will contact you shortly.";
+    form.value = {
+      company: "",
+      tel: "",
+      email: "",
+      message: "",
+    };
+  } catch {
+    formMessage.value = "Could not submit the form. Please try again.";
+  } finally {
+    pending.value = false;
+  }
 };
 
 const handleEscape = (event: KeyboardEvent) => {

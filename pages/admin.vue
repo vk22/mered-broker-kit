@@ -1,18 +1,54 @@
 <template>
   <main class="min-h-dvh bg-[#282828] px-5 py-8 text-[#171816] md:px-10">
     <section class="mx-auto flex max-w-5xl flex-col gap-8">
+      <div class="w-full flex justify-center gap-3 mb-4">
+        <button
+          class="h-10 px-4 text-sm uppercase tracking-[.12em]"
+          :class="
+            activeSection === 'projects'
+              ? 'bg-white text-[#171816]'
+              : 'border border-white/25 text-white'
+          "
+          type="button"
+          @click="activeSection = 'projects'"
+        >
+          Projects
+        </button>
+        <button
+          class="h-10 px-4 text-sm uppercase tracking-[.12em]"
+          :class="
+            activeSection === 'leads'
+              ? 'bg-white text-[#171816]'
+              : 'border border-white/25 text-white'
+          "
+          type="button"
+          @click="activeSection = 'leads'"
+        >
+          Agency leads
+        </button>
+      </div>
+
+
+      <section
+        v-if="activeSection === 'projects' && selectedProject"
+        class="grid gap-8 lg:grid-cols-[360px_1fr]"
+      >
+
       <div
-        class="flex flex-col gap-4 border-b border-black/15 pb-6 md:flex-row md:items-end md:justify-between"
+        class="flex flex-col gap-4 pb-2 md:flex-row md:items-end md:justify-between"
       >
         <div>
-          <h1 class="font-serif text-5xl leading-none text-white">Projects materials</h1>
+          <h1 class="font-serif text-3xl leading-none text-white">
+            Project Info
+          </h1>
         </div>
 
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center bg-[#232323] pr-4 rounded-full overflow-hidden border border-black/20">
-
+        <div
+          class="flex flex-col gap-3 sm:flex-row sm:items-center bg-transparent pr-4 rounded-sm overflow-hidden border border-white/20"
+        >
           <select
             v-model="selectedSlug"
-            class="h-11 min-w-[220px] text-white bg-[#232323] px-3 text-md font-semibold focus:outline-none"
+            class="h-11 min-w-[220px] text-white bg-transparent px-3 text-md font-semibold focus:outline-none"
           >
             <option
               v-for="project in projects"
@@ -25,22 +61,11 @@
         </div>
       </div>
 
-      <p
-        v-if="message"
-        class="border border-black/15 bg-white px-4 py-3 text-sm"
-      >
-        {{ message }}
-      </p>
-
-      <section
-        v-if="selectedProject"
-        class="grid gap-8 lg:grid-cols-[360px_1fr]"
-      >
         <form
           class="flex flex-col gap-4 bg-white p-7"
           @submit.prevent="saveProject"
         >
-          <h2 class="font-serif text-3xl leading-none">Project</h2>
+          <h2 class="font-serif text-3xl leading-none py-3">{{ selectedProject.name }}</h2>
 
           <label
             v-for="field in projectFields"
@@ -86,7 +111,9 @@
 
         <div class="flex flex-col gap-5">
           <div class="flex items-center justify-between">
-            <h2 class="font-serif text-3xl text-white leading-none">Materials</h2>
+            <h2 class="font-serif text-3xl text-white leading-none">
+              Materials
+            </h2>
             <button
               class="h-10 border border-black/20 bg-white px-4 text-sm uppercase tracking-[.12em]"
               type="button"
@@ -99,7 +126,7 @@
           <form
             v-for="material in selectedProject.materials"
             :key="material.id ?? material.title"
-            class="grid gap-4  bg-white p-7 md:grid-cols-2"
+            class="grid gap-4 bg-white p-7 md:grid-cols-2"
             @submit.prevent="saveMaterial(material)"
           >
             <label
@@ -177,12 +204,75 @@
           </form>
         </div>
       </section>
+
+      <section v-if="activeSection === 'leads'" class="flex flex-col gap-5">
+        <div class="flex items-center justify-start">
+          <h2 class="font-serif text-3xl text-white leading-none">
+            Agency leads
+          </h2>
+          <!-- <button
+            class="h-10 border border-black/20 bg-white px-4 text-sm uppercase tracking-[.12em]"
+            type="button"
+            @click="refreshLeads"
+          >
+            Refresh
+          </button> -->
+        </div>
+
+        <div v-if="agencyLeads.length" class="grid gap-4">
+          <article
+            v-for="lead in agencyLeads"
+            :key="lead.id"
+            class="grid gap-4 bg-white p-7 md:grid-cols-[220px_1fr]"
+          >
+            <div class="flex flex-col gap-2">
+              <p class="text-xs uppercase tracking-[.12em] text-black/50">
+                {{ formatLeadDate(lead.createdAt) }}
+              </p>
+              <h3 class="font-serif text-xl leading-none">
+                {{ lead.company }}
+              </h3>
+            </div>
+
+            <div class="grid gap-3 text-sm">
+              <div class="grid gap-3 md:grid-cols-2">
+                <a
+                  class="border-b border-black/20 pb-1"
+                  :href="`tel:${lead.tel}`"
+                >
+                  {{ lead.tel }}
+                </a>
+                <a
+                  class="border-b border-black/20 pb-1"
+                  :href="`mailto:${lead.email}`"
+                >
+                  {{ lead.email }}
+                </a>
+              </div>
+              <p v-if="lead.message" class="leading-relaxed text-black/75">
+                {{ lead.message }}
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <p v-else class="bg-white px-4 py-3 text-sm">No agency leads yet.</p>
+      </section>
     </section>
   </main>
 </template>
 
 <script setup lang="ts">
 import type { Material, MaterialIcon, Project } from "~/data/projects";
+
+type AgencyLead = {
+  id: number;
+  company: string;
+  tel: string;
+  email: string;
+  message: string;
+  createdAt: string;
+};
 
 type ProjectField = {
   key: keyof Omit<Project, "id" | "slug" | "materials">;
@@ -232,7 +322,13 @@ const materialFields: MaterialField[] = [
 const { data: projects, refresh } = await useFetch<Project[]>("/api/projects", {
   default: () => [],
 });
+const { data: agencyLeads, refresh: refreshLeads } = await useFetch<
+  AgencyLead[]
+>("/api/admin/agency-leads", {
+  default: () => [],
+});
 
+const activeSection = ref<"projects" | "leads">("projects");
 const selectedSlug = ref(projects.value[0]?.slug ?? "");
 const message = ref("");
 const uploading = ref<Record<string, boolean>>({});
@@ -247,6 +343,12 @@ const showMessage = (text: string) => {
     message.value = "";
   }, 2500);
 };
+
+const formatLeadDate = (value: string) =>
+  new Intl.DateTimeFormat("en", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(value));
 
 const isProjectUploadField = (
   key: keyof Omit<Project, "id" | "slug" | "materials">,
@@ -400,6 +502,4 @@ const removeMaterial = async (material: Material) => {
   await refresh();
   showMessage("Material deleted");
 };
-
-
 </script>
