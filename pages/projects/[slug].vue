@@ -10,7 +10,7 @@
           :class="materialCardClass(index)"
           class="group relative flex h-[175px] flex-col justify-between cursor-pointer overflow-hidden p-6 md:p-8 text-left text-white md:h-full "
           type="button"
-          @click="download(material.title)"
+          @click="openLink(material.fileUrl)"
         >
           <img
             class="absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[800ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-[1.025]"
@@ -172,4 +172,12 @@ const download = (title: string) => {
     downloaded.value = null;
   }, 1800);
 };
+
+
+const openLink = (url: string) => {
+  if (url) {
+    window.open(url,'_blank');
+  }
+  
+}
 </script>
