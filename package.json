@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "db:migrate": "node scripts/run-sql-file.mjs db/migrations",
+    "db:migrate": "node scripts/run-sql-file.mjs db/migrations/001_projects_materials.sql",
+    "db:migrate:agency-leads": "node scripts/run-sql-file.mjs db/migrations/002_agency_leads.sql",
     "db:seed": "node scripts/run-sql-file.mjs db/seeds/001_projects_materials.sql",
     "dev": "nuxt dev",
     "generate": "nuxt generate",

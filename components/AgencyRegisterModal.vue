@@ -12,10 +12,16 @@
         aria-modal="true"
         aria-labelledby="agency-form-title"
       >
-        <div class="mb-7 flex items-start justify-center gap-6">
+        <div
+          class="mb-7 flex items-start justify-center gap-6"
+          v-if="!formMessage"
+        >
           <div class="pb-8">
-            <h2 id="agency-form-title" class="font-serif text-6xl leading-none text-[#ebebeb] font-thin text-center">
-              Register <br> your agency
+            <h2
+              id="agency-form-title"
+              class="font-serif text-5xl md:text-6xl leading-none text-[#ebebeb] font-thin text-center"
+            >
+              Register your agency
             </h2>
           </div>
 
@@ -29,7 +35,11 @@
           </button> -->
         </div>
 
-        <form class="grid gap-4" @submit.prevent="submitForm">
+        <form
+          class="grid gap-4"
+          @submit.prevent="submitForm"
+          v-if="!formMessage"
+        >
           <label class="grid gap-1 text-sm">
             <span class="text-xs uppercase tracking-[.12em] text-white/70">
               Company
@@ -40,7 +50,7 @@
               name="company"
               required
               type="text"
-            >
+            />
           </label>
 
           <div class="grid gap-4 md:grid-cols-2">
@@ -54,7 +64,7 @@
                 name="tel"
                 required
                 type="tel"
-              >
+              />
             </label>
 
             <label class="grid gap-1 text-sm">
@@ -68,7 +78,7 @@
                 name="email"
                 required
                 type="email"
-              >
+              />
             </label>
           </div>
 
@@ -83,21 +93,21 @@
             />
           </label>
 
-          <p
-            v-if="formMessage"
-            class="border border-black/15 bg-white px-3 py-2 text-sm"
-          >
-            {{ formMessage }}
-          </p>
-
           <button
-            class="mt-2 h-12 bg-transparent border border-white/80 px-4 text-sm uppercase tracking-[.12em] text-white"
+            class="mt-2 h-12 bg-transparent border border-white/40 hover:border-white/80 px-4 text-sm uppercase tracking-[.12em] text-white transition duration-300"
             :disabled="pending"
             type="submit"
           >
             {{ pending ? "Submitting" : "Submit" }}
           </button>
         </form>
+
+        <h2
+          v-else
+          class="font-serif text-5xl md:text-6xl leading-none text-[#ebebeb] font-thin text-center"
+        >
+          {{ formMessage }}
+        </h2>
       </section>
     </div>
   </Teleport>
@@ -122,6 +132,7 @@ const form = ref({
 });
 
 const close = async () => {
+  console.log("close2");
   await gsap
     .timeline()
     .to(dialogElement.value, {
@@ -153,6 +164,15 @@ const submitForm = async () => {
       method: "POST",
       body: form.value,
     });
+
+    await gsap.timeline().to(dialogElement.value, {
+      autoAlpha: 0,
+      y: 18,
+      scale: 0.98,
+      duration: 0.24,
+      ease: "power2.in",
+    });
+
     formMessage.value = "Thank you. We will contact you shortly.";
     form.value = {
       company: "",
@@ -160,6 +180,23 @@ const submitForm = async () => {
       email: "",
       message: "",
     };
+    await gsap
+      .timeline()
+      .to(overlayElement.value, {
+        autoAlpha: 1,
+        duration: 0.28,
+        ease: "power2.out",
+      })
+      .fromTo(
+        dialogElement.value,
+        { autoAlpha: 0, y: 28, scale: 0.98 },
+        { autoAlpha: 1, y: 0, scale: 1, duration: 0.45, ease: "power3.out" },
+        "-=0.12",
+      );
+    setTimeout(() => {
+      console.log("close");
+      close();
+    }, 3000);
   } catch {
     formMessage.value = "Could not submit the form. Please try again.";
   } finally {

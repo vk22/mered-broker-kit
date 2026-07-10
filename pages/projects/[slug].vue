@@ -2,7 +2,7 @@
   <main>
 
     <section class="h-[calc(100dvh-125px)] bg-[#252828] ">
-      <div class="grid h-full grid-cols-1 md:grid-cols-6 md:auto-rows-fr gap-4 px-[2vw]">
+      <div class="grid h-full grid-cols-1 md:grid-cols-6 md:auto-rows-fr gap-0 md:gap-4 px-[2vw]">
         <button
           v-for="(material, index) in project.materials"
           :key="material.title"
@@ -141,6 +141,7 @@ const setMaterialCard = (element: Element | null) => {
 };
 
 const markMaterialImageLoaded = (title: string) => {
+  console.log('markMaterialImageLoaded', title)
   loadedMaterialImages.value[title] = true;
 };
 
