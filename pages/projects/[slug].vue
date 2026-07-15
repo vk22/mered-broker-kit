@@ -25,7 +25,7 @@
             @load="markMaterialImageLoaded(material.title)"
           />
           <span
-            class="pointer-events-none absolute inset-0 bg-[linear-gradient(#fff0,#262626)] opacity-[.9]"
+            class="pointer-events-none absolute inset-0 bg-[linear-gradient(66deg,rgba(17,24,32,0.80)_0%,rgba(17,24,32,0.40)_50%,rgba(17,24,32,0)_100%)] opacity-[.75]"
           />
 
           <span class="flex flex-col gap-8 pt-4">
