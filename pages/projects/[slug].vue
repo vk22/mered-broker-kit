@@ -184,7 +184,7 @@ const download = (title: string) => {
 
 const openLink = (url: string) => {
   if (url) {
-    window.open(url);
+    window.open(url, "_self")
   }
 }
 </script>
