@@ -2,7 +2,7 @@
   <main>
 
     <section class="h-[calc(100dvh-125px)] bg-[#252828] ">
-      <div class="grid h-full grid-cols-1 md:grid-cols-6 md:auto-rows-fr gap-0 md:gap-4 px-[2vw]">
+      <div class="grid h-full grid-cols-1 md:grid-cols-12 md:auto-rows-fr gap-0 md:gap-4 px-[2vw]">
         <button
           v-for="(material, index) in project.materials"
           :key="material.title"
@@ -40,13 +40,13 @@
             </span> -->
           </span>
 
-          <span class="flex flex-col gap-1 pb-2">
+          <span class="flex flex-col gap-0 md:gap-1 pb-2">
             <span
               class="relative z-[1] self-start font-serif fond-bold text-[24px] md:text-[30px] lg:md:text-[32px] xl:text-[38px] tracking-[.25px]"
               >{{ material.title }}</span
             >
             <span
-              class="relative z-[1] self-start font-sans fond-bold text-[20px]"
+              class="relative z-[1] self-start font-sans fond-bold text-[16px] md:text-[20px] w-[80%] md:w-full"
               >{{ material.subtitle }}</span
             >
           </span>
@@ -103,30 +103,30 @@ const materialCardClass = (index: number) => {
   const count = project.value?.materials.length ?? 0;
 
   if (count === 7) {
-    return index < 6 ? "md:col-span-2" : "md:col-span-2";
+    return index < 4 ? "md:col-span-3" : "md:col-span-4";
   }
 
   if (count === 6) {
-    return "md:col-span-2";
+    return "md:col-span-4";
   }
 
   if (count === 5) {
-    return index < 3 ? "md:col-span-2" : "md:col-span-3";
+    return index < 3 ? "md:col-span-4" : "md:col-span-6";
   }
 
   if (count === 4) {
-    return "md:col-span-3";
+    return "md:col-span-6";
   }
 
   if (count === 3) {
-    return "md:col-span-2";
+    return "md:col-span-4";
   }
 
   if (count === 2) {
-    return "md:col-span-3";
+    return "md:col-span-6";
   }
 
-  return "md:col-span-6";
+  return "md:col-span-12";
 };
 
 const downloaded = ref<string | null>(null);

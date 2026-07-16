@@ -1,7 +1,7 @@
 <template>
   <div>
     <header
-      class="relative inset-x-0 top-0 z-20 flex h-[100px] flex-row gap-3 items-center justify-between bg-[#252828] px-5 md:h-[145px] md:px-[2vw]"
+      class="relative inset-x-0 top-0 z-20 flex h-[130px] flex-row gap-3 items-center justify-between bg-[#252828] px-5 md:h-[145px] md:px-[2vw]"
     >
       <div class="w-[33%]">
         <NuxtLink
