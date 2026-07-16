@@ -1,29 +1,31 @@
 <template>
   <div>
     <header
-      class="relative inset-x-0 top-0 z-20 flex h-[100px] flex-row gap-3 items-center justify-between bg-[#252828] px-5 md:h-[125px] md:px-[2vw]"
+      class="relative inset-x-0 top-0 z-20 flex h-[100px] flex-row gap-3 items-center justify-between bg-[#252828] px-5 md:h-[145px] md:px-[2vw]"
     >
       <div class="w-[33%]">
         <NuxtLink
           v-if="headerProject"
           class="relative z-[2] text-[12px] uppercase tracking-[.14em] text-white flex items-center gap-2"
           to="/"
-          ><span class="text-[18px] pr-2 h-8">←</span> <span class="hidden md:block">All projects</span></NuxtLink
+          ><span class="text-[18px] pr-2 h-8">←</span>
+          <span class="hidden md:block">All projects</span></NuxtLink
         >
       </div>
 
       <div class="flex flex-col gap-1 justify-center items-center pt-2">
         <NuxtLink class="" to="/">
-          <div class="h-10 flex align-bottom">
+          <div class="h-24 flex align-bottom">
             <img
               ref="headerLogoElement"
               :src="displayedHeaderLogo"
               :alt="displayedHeaderLogoAlt"
-              class="w-[165px] shadow-sm"
+              class="w-[200px] shadow-sm"
             />
           </div>
+          <!-- <p class="text-white/50 text-sm tracking-wider" v-if="!headerProject">Brokers Kit</p> -->
         </NuxtLink>
-        <p class="text-white/50 text-sm tracking-wider">Brokers Media Kit</p>
+        
       </div>
 
       <div class="w-[33%] flex justify-end h-full flex p-0 items-center">
@@ -31,7 +33,7 @@
           v-if="!isNotFront"
           class="hidden md:block h-12 bg-transparent border border-white/30 hover:border-white/70 text-[#fff] text-[.75rem] md:text-[.85rem] tracking-[.1rem] bg-[#fff] px-4 rounded-0 uppercase transition duration-300"
           type="button"
-          @click="openAgencyModal"
+          @click="openLink(meredBrokerLink)"
         >
           Register Your Agency
         </button>
@@ -40,11 +42,10 @@
           v-if="!isNotFront"
           class="block md:hidden h-10 bg-transparent text-[#fff] text-[.75rem] md:text-[.85rem] tracking-[.1rem] bg-[#fff] px-4 rounded-0 uppercase"
           type="button"
-          @click="openAgencyModal"
+          @click="openLink(meredBrokerLink)"
         >
-           <Send class="w-6 h-6"></Send>
+          <Send class="w-6 h-6"></Send>
         </button>
-
 
         <button
           v-if="isAdmin"
@@ -95,6 +96,7 @@ import { Send } from "lucide-vue-next";
 const menuOpen = ref(false);
 const route = useRoute();
 const headerLogoElement = ref<HTMLImageElement | null>(null);
+const meredBrokerLink = 'https://mered.ae/broker'
 
 const headerProject = computed(() => {
   const slug = route.params.slug;
@@ -172,5 +174,11 @@ const logout = async () => {
 
 const openAgencyModal = () => {
   agencyModalOpen.value = true;
+};
+
+const openLink = (url: string) => {
+  if (url) {
+    window.open(url, "_blank");
+  }
 };
 </script>

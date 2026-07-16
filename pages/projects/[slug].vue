@@ -29,7 +29,7 @@
           />
 
           <span class="flex flex-col gap-8 pt-4">
-            <span
+            <!-- <span
               class="relative z-[1] self-start justify-self-start text-[9px] tracking-[.1em]"
             >
               <component
@@ -37,7 +37,7 @@
                 class="h-8 w-8"
                 :stroke-width="1.5"
               ></component>
-            </span>
+            </span> -->
           </span>
 
           <span class="flex flex-col gap-1 pb-2">
@@ -101,6 +101,14 @@ useSeoMeta({
 
 const materialCardClass = (index: number) => {
   const count = project.value?.materials.length ?? 0;
+
+  if (count === 7) {
+    return index < 6 ? "md:col-span-2" : "md:col-span-2";
+  }
+
+  if (count === 6) {
+    return "md:col-span-2";
+  }
 
   if (count === 5) {
     return index < 3 ? "md:col-span-2" : "md:col-span-3";
@@ -176,8 +184,7 @@ const download = (title: string) => {
 
 const openLink = (url: string) => {
   if (url) {
-    window.open(url,'_blank');
+    window.open(url);
   }
-  
 }
 </script>

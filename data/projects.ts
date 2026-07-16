@@ -42,7 +42,7 @@ export const fallbackProjects: Project[] = [
     completion: "Q4 2028",
     image: "/images/iconic/main.jpg",
     logo: "/images/iconic/iconic-logo.svg",
-    logo2: "/images/iconic/iconic-logo2.svg",
+    logo2: "/images/iconic/iconic-logo.svg",
     eyebrow: "Waterfront residences",
     description:
       "An exclusive branded residence designed by Italian icon Pininfarina.",
@@ -107,7 +107,7 @@ export const fallbackProjects: Project[] = [
     completion: "Q2 2027",
     image: "/images/riviera/main.jpg",
     logo: "/images/riviera/riviera-logo.svg",
-    logo2: "/images/riviera/riviera-logo2.svg",
+    logo2: "/images/riviera/riviera-logo.svg",
     eyebrow: "Private beach collection",
     description:
       "Stunning waterfront residences with signature architecture and amenities.",

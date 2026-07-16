@@ -10,7 +10,7 @@
               : 'border border-white/25 text-white'
           "
           type="button"
-          @click="activeSection = 'projects'"
+          @click="setActiveSection('projects')"
         >
           Projects
         </button>
@@ -22,7 +22,7 @@
               : 'border border-white/25 text-white'
           "
           type="button"
-          @click="activeSection = 'leads'"
+          @click="setActiveSection('leads')"
         >
           Agency leads
         </button>
@@ -124,7 +124,7 @@
           </div>
 
           <form
-            v-for="material in selectedProject.materials"
+            v-for="(material, index) in selectedProject.materials"
             :key="material.id ?? material.title"
             class="grid gap-4 bg-white p-7 md:grid-cols-2"
             @submit.prevent="saveMaterial(material)"
@@ -187,6 +187,25 @@
             </label>
 
             <div class="flex gap-3 md:col-span-2">
+              <button
+                class="h-10 border border-black/20 px-4 text-sm uppercase tracking-[.12em] disabled:opacity-35"
+                type="button"
+                :disabled="index === 0 || orderingMaterials"
+                @click="moveMaterial(index, -1)"
+              >
+                ↑
+              </button>
+              <button
+                class="h-10 border border-black/20 px-4 text-sm uppercase tracking-[.12em] disabled:opacity-35"
+                type="button"
+                :disabled="
+                  index === selectedProject.materials.length - 1 ||
+                  orderingMaterials
+                "
+                @click="moveMaterial(index, 1)"
+              >
+                ↓
+              </button>
               <button
                 class="h-10 bg-[#171816] px-4 text-sm uppercase tracking-[.12em] text-white"
                 type="submit"
@@ -265,6 +284,8 @@
 <script setup lang="ts">
 import type { Material, MaterialIcon, Project } from "~/data/projects";
 
+const route = useRoute();
+
 type AgencyLead = {
   id: number;
   company: string;
@@ -328,10 +349,24 @@ const { data: agencyLeads, refresh: refreshLeads } = await useFetch<
   default: () => [],
 });
 
-const activeSection = ref<"projects" | "leads">("projects");
+const routeSection = computed<"projects" | "leads">(() =>
+  route.path === "/admin/leads" ? "leads" : "projects",
+);
+
+const activeSection = ref<"projects" | "leads">(routeSection.value);
 const selectedSlug = ref(projects.value[0]?.slug ?? "");
 const message = ref("");
 const uploading = ref<Record<string, boolean>>({});
+const orderingMaterials = ref(false);
+
+watch(routeSection, (section) => {
+  activeSection.value = section;
+});
+
+const setActiveSection = async (section: "projects" | "leads") => {
+  activeSection.value = section;
+  await navigateTo(section === "leads" ? "/admin/leads" : "/admin");
+};
 
 const selectedProject = computed(() =>
   projects.value.find((project) => project.slug === selectedSlug.value),
@@ -486,6 +521,54 @@ const saveMaterial = async (material: Material) => {
   );
   await refresh();
   showMessage("Material saved");
+};
+
+const moveMaterial = async (index: number, direction: -1 | 1) => {
+  if (!selectedProject.value || orderingMaterials.value) {
+    return;
+  }
+
+  const materials = selectedProject.value.materials;
+  const targetIndex = index + direction;
+
+  if (targetIndex < 0 || targetIndex >= materials.length) {
+    return;
+  }
+
+  const nextMaterials = [...materials];
+  const [movedMaterial] = nextMaterials.splice(index, 1);
+  nextMaterials.splice(targetIndex, 0, movedMaterial);
+  nextMaterials.forEach((material, materialIndex) => {
+    material.sortOrder = materialIndex + 1;
+  });
+
+  selectedProject.value.materials = nextMaterials;
+  orderingMaterials.value = true;
+
+  try {
+    await Promise.all(
+      nextMaterials
+        .filter((material): material is Material & { id: number } =>
+          Boolean(material.id),
+        )
+        .map((material) =>
+          $fetch(
+            `/api/projects/${selectedProject.value?.slug}/materials/${material.id}`,
+            {
+              method: "PUT",
+              body: material,
+            },
+          ),
+        ),
+    );
+    await refresh();
+    showMessage("Materials order saved");
+  } catch {
+    await refresh();
+    showMessage("Could not save materials order");
+  } finally {
+    orderingMaterials.value = false;
+  }
 };
 
 const removeMaterial = async (material: Material) => {
