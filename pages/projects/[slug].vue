@@ -8,11 +8,12 @@
           :key="material.title"
           :ref="setMaterialCard"
           :class="materialCardClass(index)"
-          class="group relative flex h-[175px] flex-col justify-between cursor-pointer overflow-hidden p-6 md:p-8 text-left text-white md:h-full "
+          class="group relative flex h-[175px] flex-col justify-between cursor-pointer overflow-hidden p-6 md:p-6 lg:p-8 text-left text-white md:h-full "
           type="button"
           @click="openLink(material.fileUrl)"
         >
           <img
+            :ref="(element) => setMaterialImage(element, index)"
             class="absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[800ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-[1.025]"
             :class="
               loadedMaterialImages[material.title] ? 'opacity-100' : 'opacity-0'
@@ -40,19 +41,19 @@
             </span> -->
           </span>
 
-          <span class="flex flex-col gap-0 md:gap-1 pb-2">
+          <span class="flex flex-col gap-0 md:gap-0 lg:gap-1 pb-0">
             <span
-              class="relative z-[1] self-start font-serif fond-bold text-[24px] md:text-[30px] lg:md:text-[32px] xl:text-[38px] tracking-[.25px]"
+              class="relative z-[1] self-start font-serif fond-bold text-[24px] md:text-[26px] lg:md:text-[32px] xl:text-[38px] tracking-[.25px]"
               >{{ material.title }}</span
             >
             <span
-              class="relative z-[1] self-start font-sans fond-bold text-[16px] md:text-[20px] w-[80%] md:w-full"
+              class="relative z-[1] self-start font-sans fond-bold text-[16px] md:text-[16px] lg:text-[20px] w-[80%] md:w-full"
               >{{ material.subtitle }}</span
             >
           </span>
 
           <span
-            class="absolute right-8 bottom-8 z-[1] tracking-[.1em] text-[32px]"
+            class="absolute right-8 bottom-4 lg:bottom-8 z-[1] tracking-[.1em] text-[32px]"
             >→</span
           >
           <!-- <span class="absolute right-6 top-[22px] z-[1] text-[22px]">{{ downloaded === material.title ? '✓' : '↓' }}</span> -->
@@ -131,6 +132,7 @@ const materialCardClass = (index: number) => {
 
 const downloaded = ref<string | null>(null);
 const materialCards = ref<HTMLElement[]>([]);
+const materialImages = ref<HTMLImageElement[]>([]);
 const loadedMaterialImages = ref<Record<string, boolean>>({});
 
 useHead({
@@ -148,17 +150,29 @@ const setMaterialCard = (element: Element | null) => {
   }
 };
 
+const setMaterialImage = (element: Element | null, index: number) => {
+  if (element instanceof HTMLImageElement) {
+    materialImages.value[index] = element;
+  }
+};
+
 const markMaterialImageLoaded = (title: string) => {
-  console.log('markMaterialImageLoaded', title)
   loadedMaterialImages.value[title] = true;
 };
 
 onBeforeUpdate(() => {
   materialCards.value = [];
+  materialImages.value = [];
 });
 
 onMounted(async () => {
   await nextTick();
+
+  materialImages.value.forEach((image, index) => {
+    if (image.complete && image.naturalWidth > 0) {
+      markMaterialImageLoaded(project.value.materials[index].title);
+    }
+  });
 
   gsap.set(materialCards.value, {
     autoAlpha: 0,
