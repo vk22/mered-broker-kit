@@ -41,13 +41,13 @@
             </span> -->
           </span>
 
-          <span class="flex flex-col gap-0 md:gap-0 lg:gap-1 pb-0">
+          <span class="flex flex-col gap-0 md:gap-0 lg:gap-1 pb-0 pr-[50px]">
             <span
               class="relative z-[1] self-start font-serif fond-bold text-[24px] md:text-[26px] lg:md:text-[32px] xl:text-[38px] tracking-[.25px]"
               >{{ material.title }}</span
             >
             <span
-              class="relative z-[1] self-start font-sans fond-bold text-[16px] md:text-[16px] lg:text-[20px] w-[80%] md:w-full"
+              class="relative z-[1] self-start font-sans fond-bold text-[16px] md:text-[16px] lg:text-[20px] w-[80%] md:w-full "
               >{{ material.subtitle }}</span
             >
           </span>
