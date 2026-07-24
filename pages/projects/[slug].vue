@@ -41,9 +41,9 @@
             </span> -->
           </span>
 
-          <span class="flex flex-col gap-0 md:gap-0 lg:gap-1 pb-0 pr-[50px]">
+          <span class="flex flex-col gap-0 md:gap-1 lg:gap-1 pb-0 pr-[50px]">
             <span
-              class="relative z-[1] self-start font-serif fond-bold text-[24px] md:text-[26px] lg:md:text-[32px] xl:text-[38px] leading-[1.25] tracking-[.25px]"
+              class="relative z-[1] self-start font-serif fond-bold text-[24px] md:text-[26px] lg:md:text-[32px] xl:text-[38px] leading-[1.15] tracking-[.25px]"
               >{{ material.title }}</span
             >
             <span
