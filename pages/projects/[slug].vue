@@ -1,7 +1,7 @@
 <template>
   <main>
 
-    <section class="h-[calc(100dvh-145px)] bg-[#252828] ">
+    <section class="h-[calc(100dvh-155px)] bg-[#252828] ">
       <div class="grid h-full grid-cols-1 md:grid-cols-12 md:auto-rows-fr gap-0 md:gap-4 px-[2vw]">
         <button
           v-for="(material, index) in project.materials"
@@ -43,11 +43,11 @@
 
           <span class="flex flex-col gap-0 md:gap-0 lg:gap-1 pb-0 pr-[50px]">
             <span
-              class="relative z-[1] self-start font-serif fond-bold text-[24px] md:text-[26px] lg:md:text-[32px] xl:text-[38px] tracking-[.25px]"
+              class="relative z-[1] self-start font-serif fond-bold text-[24px] md:text-[26px] lg:md:text-[32px] xl:text-[38px] leading-[1.25] tracking-[.25px]"
               >{{ material.title }}</span
             >
             <span
-              class="relative z-[1] self-start font-sans fond-bold text-[16px] md:text-[16px] lg:text-[20px] w-[80%] md:w-full "
+              class="relative z-[1] self-start font-sans fond-bold text-[16px] md:text-[16px] lg:text-[20px] leading-[1.25] w-[80%] md:w-full "
               >{{ material.subtitle }}</span
             >
           </span>
