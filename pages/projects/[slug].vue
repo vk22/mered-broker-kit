@@ -53,7 +53,7 @@
           </span>
 
           <span
-            class="absolute right-8 bottom-4 lg:bottom-8 z-[1] tracking-[.1em] text-[32px]"
+            class="absolute right-6 bottom-5 lg:bottom-8 z-[1] tracking-[.1em] text-[32px]"
             >→</span
           >
           <!-- <span class="absolute right-6 top-[22px] z-[1] text-[22px]">{{ downloaded === material.title ? '✓' : '↓' }}</span> -->
