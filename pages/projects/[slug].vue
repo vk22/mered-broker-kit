@@ -1,14 +1,14 @@
 <template>
   <main>
 
-    <section class="h-[calc(100dvh-125px)] bg-[#252828] ">
+    <section class="h-[calc(100dvh-145px)] bg-[#252828] ">
       <div class="grid h-full grid-cols-1 md:grid-cols-12 md:auto-rows-fr gap-0 md:gap-4 px-[2vw]">
         <button
           v-for="(material, index) in project.materials"
           :key="material.title"
           :ref="setMaterialCard"
           :class="materialCardClass(index)"
-          class="group relative flex h-[175px] flex-col justify-between cursor-pointer overflow-hidden p-6 md:p-6 lg:p-8 text-left text-white md:h-full "
+          class="group relative flex h-[175px] flex-col justify-between cursor-pointer overflow-hidden p-6 md:p-8 lg:p-8 text-left text-white md:h-full "
           type="button"
           @click="openLink(material.fileUrl)"
         >
