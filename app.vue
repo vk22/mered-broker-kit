@@ -74,14 +74,7 @@
         <img src="assets/img/mered-logo2.svg" alt="" class="w-[135px]" />
       </div>
 
-      <div
-        class="flex justify-center pt-[5px] text-[9px] uppercase tracking-[.16em] md:col-span-2"
-      >
-        <span
-          >© {{ new Date().getFullYear() }} Mered Residences Real Estate
-          LLC</span
-        >
-      </div>
+
     </footer>
   </div>
 </template>

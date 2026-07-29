@@ -2,7 +2,7 @@
   <main>
     <section
       id="projects"
-      class="flex w-full h-dvh relative bg-[#252828]"
+      class="flex w-full h-[calc(100dvh-125px)] relative bg-[#252828]"
     >
       <div class="flex flex-col basis-full md:flex-row w-full h-[calc(100dvh-125px)] ">
         <NuxtLink
@@ -40,20 +40,20 @@
     </section>
 
     <section
-      class="relative bg-[#252828] px-5 py-[85px] text-white md:px-[7vw] md:pt-[100px] flex flex-col items-center"
+      class="relative bg-[#252828] px-5 py-[85px] text-white md:px-[7vw] md:pt-[150px] flex flex-col items-center"
     >
       <p class="mb-[22px] text-[10px] uppercase tracking-[.2em] text-white/70 text-center">
-        Broker support
+        Broker relations
       </p>
       <h2
         class="mb-[90px] font-serif text-6xl font-medium leading-[.96] tracking-[-.04em] text-center"
       >
-        Need something<br />specific?
+        Need additional support?
       </h2>
       <a
         class="flex w-[310px] justify-between border-b border-white/50 pb-[17px] text-xs uppercase tracking-[.13em]"
-        href="mailto:sales@mered.ae"
-        >Talk to our team <span>↗</span></a
+        href="mailto:cc@mered.ae"
+        >Get in Touch <span>↗</span></a
       >
     </section>
   </main>
