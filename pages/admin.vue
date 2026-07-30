@@ -282,6 +282,7 @@
 </template>
 
 <script setup lang="ts">
+useSeoMeta({ robots: "noindex, nofollow" });
 import type { Material, MaterialIcon, Project } from "~/data/projects";
 
 const route = useRoute();

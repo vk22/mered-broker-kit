@@ -1,9 +1,9 @@
 <template>
   <div>
     <header
-      class="relative inset-x-0 top-0 z-20 flex h-[130px] flex-row gap-3 items-center justify-between bg-[#252828] px-5 md:h-[145px] md:px-[2vw]"
+      class="relative inset-x-0 top-0 z-20 flex h-[100px] md:h-[145px] flex-row gap-3 items-center justify-between bg-[#252828] px-5 md:px-[2vw]"
     >
-      <div class="w-[33%]">
+      <div class="w-[40%] hidden md:block">
         <NuxtLink
           v-if="headerProject"
           class="relative z-[2] text-[12px] uppercase tracking-[.14em] text-white flex items-center gap-2"
@@ -20,7 +20,7 @@
               ref="headerLogoElement"
               :src="displayedHeaderLogo"
               :alt="displayedHeaderLogoAlt"
-              class="w-[200px] shadow-sm"
+              class="w-[120px] md:w-[200px] shadow-sm"
             />
           </div>
           <!-- <p class="text-white/50 text-sm tracking-wider" v-if="!headerProject">Brokers Kit</p> -->
@@ -28,24 +28,24 @@
         
       </div>
 
-      <div class="w-[33%] flex justify-end h-full flex p-0 items-center">
+      <div class="w-[40%] flex justify-end h-full flex p-0 items-center">
         <button
           v-if="!isNotFront"
-          class="hidden md:block h-12 bg-transparent border border-white/30 hover:border-white/70 text-[#fff] text-[.75rem] md:text-[.85rem] tracking-[.1rem] bg-[#fff] px-4 rounded-0 uppercase transition duration-300"
+          class="bg-transparent border border-white/30 hover:border-white/70 text-[#fff] text-[.7rem] md:text-[.85rem] h-8 md:h-12 px-2 md:px-4 tracking-[.1rem] rounded-0 uppercase transition duration-300"
           type="button"
           @click="openLink(meredBrokerLink)"
         >
           Register Your Agency
         </button>
 
-        <button
+        <!-- <button
           v-if="!isNotFront"
           class="block md:hidden h-10 bg-transparent text-[#fff] text-[.75rem] md:text-[.85rem] tracking-[.1rem] bg-[#fff] px-4 rounded-0 uppercase"
           type="button"
           @click="openLink(meredBrokerLink)"
         >
           <Send class="w-6 h-6"></Send>
-        </button>
+        </button> -->
 
         <button
           v-if="isAdmin"

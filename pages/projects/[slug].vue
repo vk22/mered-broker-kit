@@ -8,7 +8,7 @@
           :key="material.title"
           :ref="setMaterialCard"
           :class="materialCardClass(index)"
-          class="group relative flex h-[175px] flex-col justify-between cursor-pointer overflow-hidden p-6 md:p-8 lg:p-8 text-left text-white md:h-full "
+          class="group relative flex h-[175px] flex-col justify-between cursor-pointer overflow-hidden p-4 sm:p-6 md:p-8 lg:p-8 text-left text-white md:h-full "
           type="button"
           @click="openLink(material.fileUrl)"
         >
@@ -53,7 +53,7 @@
           </span>
 
           <span
-            class="absolute right-6 bottom-5 lg:bottom-8 z-[1] tracking-[.1em] text-[32px]"
+            class="absolute right-4 bottom-2 md:right-6 md:bottom-4 lg:bottom-8 z-[1] tracking-[.1em] text-[32px]"
             >→</span
           >
           <!-- <span class="absolute right-6 top-[22px] z-[1] text-[22px]">{{ downloaded === material.title ? '✓' : '↓' }}</span> -->
@@ -95,9 +95,54 @@ if (!project.value) {
   throw createError({ statusCode: 404, statusMessage: "Project not found" });
 }
 
-useSeoMeta({
-  title: () => `${project.value?.name ?? "Project"} | MERED Broker Kit`,
-  description: () => project.value?.description ?? "",
+const projectTitle = computed(
+  () => `${project.value?.name ?? "Project"} | MERED Broker Kit`,
+);
+const projectDescription = computed(
+  () =>
+    project.value?.description ||
+    `Official sales and marketing materials for ${project.value?.name ?? "this MERED project"}.`,
+);
+const socialImage = computed(() => {
+  const slug = project.value?.slug;
+  return slug === "iconic" || slug === "riviera"
+    ? `/images/social/${slug}.jpg`
+    : project.value?.image || "/images/social/mered-broker-kit.jpg";
+});
+const { canonicalUrl, imageUrl } = usePageSeo({
+  title: projectTitle,
+  description: projectDescription,
+  image: socialImage,
+  imageAlt: computed(
+    () => `${project.value?.name ?? "MERED project"} official broker materials`,
+  ),
+  path: computed(() => `/projects/${project.value?.slug ?? String(route.params.slug)}`),
+});
+
+useHead({
+  script: [
+    {
+      type: "application/ld+json",
+      innerHTML: () =>
+        JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: projectTitle.value,
+          description: projectDescription.value,
+          url: canonicalUrl.value,
+          image: imageUrl.value,
+          isPartOf: {
+            "@type": "WebSite",
+            name: "MERED Broker Kit",
+          },
+          about: {
+            "@type": "Residence",
+            name: project.value?.name,
+            address: project.value?.location,
+          },
+        }),
+    },
+  ],
 });
 
 const materialCardClass = (index: number) => {

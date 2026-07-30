@@ -68,6 +68,39 @@ const { data: projects } = await useFetch<Project[]>('/api/projects', {
   default: () => []
 })
 
+const pageTitle = 'MERED Broker Kit | Official Sales Materials'
+const pageDescription =
+  'Access official presentations, renders, videos, floor plans and sales tools for MERED real estate projects.'
+const { canonicalUrl, imageUrl } = usePageSeo({
+  title: pageTitle,
+  description: pageDescription,
+  image: '/images/social/mered-broker-kit.jpg',
+  imageAlt: 'MERED Broker Kit — official project sales materials',
+  path: '/'
+})
+
+useHead({
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: () =>
+        JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: 'MERED Broker Kit',
+          url: canonicalUrl.value,
+          description: pageDescription,
+          image: imageUrl.value,
+          publisher: {
+            '@type': 'Organization',
+            name: 'MERED',
+            url: 'https://mered.ae'
+          }
+        })
+    }
+  ]
+})
+
 const projectCards = ref<HTMLElement[]>([])
 const projectImages = ref<HTMLImageElement[]>([])
 const loadedProjectImages = ref<Record<string, boolean>>({})
