@@ -103,6 +103,10 @@ useSeoMeta({
 const materialCardClass = (index: number) => {
   const count = project.value?.materials.length ?? 0;
 
+  if (count === 8) {
+    return "md:col-span-3";
+  }
+
   if (count === 7) {
     return index < 4 ? "md:col-span-3" : "md:col-span-4";
   }
