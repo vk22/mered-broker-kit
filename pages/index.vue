@@ -4,7 +4,7 @@
       id="projects"
       class="flex w-full h-[calc(100dvh-125px)] relative bg-[#252828]"
     >
-      <div class="flex flex-col basis-full md:flex-row w-full h-[calc(100dvh-125px)] ">
+      <div class="flex flex-col basis-full md:flex-row w-full h-[calc(100dvh-125px)] bg-[#000000">
         <NuxtLink
           v-for="(project, index) in projects"
           :key="project.slug"
