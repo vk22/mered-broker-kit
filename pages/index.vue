@@ -4,7 +4,7 @@
       id="projects"
       class="flex w-full h-[calc(100dvh-125px)] relative bg-[#252828]"
     >
-      <div class="flex flex-col basis-full md:flex-row w-full h-[calc(100dvh-125px)] bg-[#000000]">
+      <div class="flex flex-col basis-full md:flex-row w-full h-[calc(100dvh-125px)] ">
         <NuxtLink
           v-for="(project, index) in projects"
           :key="project.slug"
@@ -15,7 +15,7 @@
             :ref="setProjectCard"
             class="relative flex h-full w-full items-center justify-center overflow-hidden "
           >
-            <div class="relative z-[999] text-white flex flex-col h-full items-center justify-center text-center">
+            <div class="relative z-[999] text-white flex flex-col h-full w-full items-center justify-center text-center">
               <img :src="`${project.logo}`"alt="" class="w-[40vw] md:w-[20vw]">
               <div class="absolute bottom-0 w-[100vw] flex justify-center flex p-10 md:p-16">
                 <p class="text-md md:text-xl text-center leading-[1.2rem] md:leading-[1.65rem]  px-[1vw] md:px-[35vw]">{{ project.description }}</p>
@@ -25,7 +25,7 @@
             <img
               :ref="setProjectImage"
               class="absolute top-0 left-0 h-full w-full object-cover transition-[opacity,transform] duration-[800ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-[1.025]"
-              :class="loadedProjectImages[project.slug] ? 'opacity-60' : 'opacity-0'"
+              :class="loadedProjectImages[project.slug] ? 'opacity-100' : 'opacity-0'"
               :src="project.image"
               :alt="project.name"
               loading="eager"
