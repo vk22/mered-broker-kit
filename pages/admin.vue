@@ -55,7 +55,7 @@
               :key="project.slug"
               :value="project.slug"
             >
-              {{ project.name }}
+              {{ project.slug === "riviera" ? "Riviera — Phase 1 & phase selection" : project.name }}
             </option>
           </select>
         </div>
@@ -68,7 +68,7 @@
           <h2 class="font-serif text-3xl leading-none py-3">{{ selectedProject.name }}</h2>
 
           <label
-            v-for="field in projectFields"
+            v-for="field in visibleProjectFields"
             :key="field.key"
             class="grid gap-1 text-sm"
           >
@@ -278,6 +278,7 @@
         <p v-else class="bg-white px-4 py-3 text-sm">No agency leads yet.</p>
       </section>
     </section>
+    <p v-if="message" role="status" class="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 bg-white px-6 py-4 text-sm shadow-lg">{{ message }}</p>
   </main>
 </template>
 
@@ -331,6 +332,10 @@ const projectFields: ProjectField[] = [
   { key: "logo", label: "Logo" },
   { key: "logo2", label: "Logo 2" },
 ];
+
+const visibleProjectFields = computed(() => selectedSlug.value === "riviera"
+  ? [...projectFields, { key: "phaseSelectionImage" as const, label: "Phase selection background" }]
+  : projectFields);
 
 const materialFields: MaterialField[] = [
   { key: "title", label: "Title" },
@@ -388,7 +393,7 @@ const formatLeadDate = (value: string) =>
 
 const isProjectUploadField = (
   key: keyof Omit<Project, "id" | "slug" | "materials">,
-) => ["image", "logo", "logo2"].includes(key);
+) => ["image", "logo", "logo2", "phaseSelectionImage"].includes(key);
 
 const projectUploadKey = (key: string) => `project:${key}`;
 

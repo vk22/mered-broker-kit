@@ -6,7 +6,7 @@
     >
       <div class="flex flex-col basis-full md:flex-row w-full h-[calc(100dvh-125px)] ">
         <NuxtLink
-          v-for="(project, index) in projects"
+          v-for="(project, index) in featuredProjects"
           :key="project.slug"
           class="group block flex-1"
           :to="`/projects/${project.slug}`"
@@ -68,6 +68,10 @@ const { data: projects } = await useFetch<Project[]>('/api/projects', {
   default: () => []
 })
 
+const featuredProjects = computed(() => projects.value.filter(project =>
+  project.slug === 'iconic' || project.slug === 'riviera'
+))
+
 const pageTitle = 'MERED Broker Kit | Official Sales Materials'
 const pageDescription =
   'Access official presentations, renders, videos, floor plans and sales tools for MERED real estate projects.'
@@ -106,7 +110,7 @@ const projectImages = ref<HTMLImageElement[]>([])
 const loadedProjectImages = ref<Record<string, boolean>>({})
 
 useHead({
-  link: projects.value.map(project => ({
+  link: featuredProjects.value.map(project => ({
     rel: 'preload',
     as: 'image',
     href: project.image,
@@ -140,7 +144,7 @@ onMounted(async () => {
 
   projectImages.value.forEach((image, index) => {
     if (image.complete && image.naturalWidth > 0) {
-      markProjectImageLoaded(projects.value[index].slug)
+      markProjectImageLoaded(featuredProjects.value[index].slug)
     }
   })
 

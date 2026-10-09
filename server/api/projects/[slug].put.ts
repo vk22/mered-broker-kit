@@ -22,6 +22,7 @@ export default defineEventHandler(async (event) => {
     status: body.status,
     completion: body.completion,
     image: body.image,
+    phaseSelectionImage: body.phaseSelectionImage,
     logo: body.logo,
     logo2: body.logo2,
     eyebrow: body.eyebrow,

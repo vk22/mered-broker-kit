@@ -3,13 +3,13 @@
     <header
       class="relative inset-x-0 top-0 z-20 flex h-[100px] md:h-[145px] flex-row gap-3 items-center justify-between bg-[#252828] px-5 md:px-[2vw]"
     >
-      <div class="w-[40%] hidden md:block">
+      <div class="w-[40%]" :class="headerProject ? 'block' : 'hidden md:block'">
         <NuxtLink
           v-if="headerProject"
           class="relative z-[2] text-[12px] uppercase tracking-[.14em] text-white flex items-center gap-2"
-          to="/"
+          :to="isRivieraPhase ? '/projects/riviera' : '/'"
           ><span class="text-[18px] pr-2 h-8">←</span>
-          <span class="hidden md:block">All projects</span></NuxtLink
+          <span>{{ isRivieraPhase ? "All phases" : "All projects" }}</span></NuxtLink
         >
       </div>
 
@@ -81,6 +81,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import type { Project } from "~/data/projects";
 import { gsap } from "gsap";
 import meredLogo from "~/assets/img/mered-logo.svg";
 import { useRoute } from "vue-router";
@@ -91,15 +92,12 @@ const route = useRoute();
 const headerLogoElement = ref<HTMLImageElement | null>(null);
 const meredBrokerLink = 'https://mered.ae/broker'
 
-const headerProject = computed(() => {
-  const slug = route.params.slug;
-
-  if (!route.path.startsWith("/projects/") || typeof slug !== "string") {
-    return null;
-  }
-
-  return useProject(slug) ?? null;
-});
+const isRivieraPhase = computed(() => /^\/projects\/riviera\/phase[12]\/?$/.test(route.path));
+const headerSlug = computed(() => route.path.startsWith("/projects/riviera")
+  ? "riviera"
+  : typeof route.params.slug === "string" ? route.params.slug : "");
+const { data: headerProjects } = await useFetch<Project[]>("/api/projects", { default: () => [] });
+const headerProject = computed(() => headerProjects.value.find(project => project.slug === headerSlug.value) ?? null);
 
 const headerLogo = computed(() => headerProject.value?.logo2 ?? meredLogo);
 const headerLogoAlt = computed(() => headerProject.value?.name ?? "MERED");

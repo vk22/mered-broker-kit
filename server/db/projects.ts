@@ -9,6 +9,7 @@ type ProjectRow = {
   status: string;
   completion: string;
   image: string;
+  phase_selection_image: string;
   logo: string;
   logo2: string;
   eyebrow: string;
@@ -48,6 +49,7 @@ const mapProject = (row: ProjectRow, materials: Material[] = []): Project => ({
   status: row.status,
   completion: row.completion,
   image: row.image,
+  phaseSelectionImage: row.phase_selection_image,
   logo: row.logo,
   logo2: row.logo2,
   eyebrow: row.eyebrow,
@@ -61,7 +63,7 @@ export const getProjects = async (): Promise<Project[]> => {
   }
 
   const { rows } = await getPool().query<ProjectRow>(`
-    select id, slug, name, location, status, completion, image, logo, logo2, eyebrow, description
+    select id, slug, name, location, status, completion, image, phase_selection_image, logo, logo2, eyebrow, description
     from projects
     order by sort_order asc, id asc
   `);
@@ -89,7 +91,7 @@ export const getProjectBySlug = async (slug: string): Promise<Project | null> =>
 
   const projectResult = await getPool().query<ProjectRow>(
     `
-      select id, slug, name, location, status, completion, image, logo, logo2, eyebrow, description
+      select id, slug, name, location, status, completion, image, phase_selection_image, logo, logo2, eyebrow, description
       from projects
       where slug = $1
       limit 1
@@ -133,9 +135,10 @@ export const updateProjectBySlug = async (
         logo2 = coalesce($8, logo2),
         eyebrow = coalesce($9, eyebrow),
         description = coalesce($10, description),
+        phase_selection_image = coalesce($11, phase_selection_image),
         updated_at = now()
       where slug = $1
-      returning id, slug, name, location, status, completion, image, logo, logo2, eyebrow, description
+      returning id, slug, name, location, status, completion, image, phase_selection_image, logo, logo2, eyebrow, description
     `,
     [
       slug,
@@ -148,6 +151,7 @@ export const updateProjectBySlug = async (
       input.logo2,
       input.eyebrow,
       input.description,
+      input.phaseSelectionImage,
     ],
   );
 

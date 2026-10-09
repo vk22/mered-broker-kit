@@ -26,6 +26,7 @@ export type Project = {
   status: string;
   completion: string;
   image: string;
+  phaseSelectionImage?: string;
   logo: string;
   logo2: string;
   eyebrow: string;
@@ -156,3 +157,12 @@ export const fallbackProjects: Project[] = [
   },
 ];
 
+
+// Phase 1 keeps the existing Riviera record and all its material links.
+const riviera = fallbackProjects.find(project => project.slug === "riviera")!;
+fallbackProjects.push({
+  ...riviera,
+  slug: "riviera-phase2",
+  name: "RIVIERA RESIDENCES Phase 2",
+  materials: riviera.materials.map(material => ({ ...material, fileUrl: "" })),
+});
