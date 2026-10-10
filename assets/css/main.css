@@ -59,3 +59,11 @@
     @apply bg-[#252828] font-sans text-ink antialiased;
   }
 }
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease, transform 0.45s ease;
+}
+.fade-enter-from, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
+  transform: translateY(4px);
+}

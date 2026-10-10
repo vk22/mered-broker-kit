@@ -3,7 +3,7 @@
     <header
       class="relative inset-x-0 top-0 z-20 flex h-[100px] md:h-[145px] flex-row gap-3 items-center justify-between bg-[#252828] px-5 md:px-[2vw]"
     >
-      <div class="w-[40%]" :class="headerProject ? 'block' : 'hidden md:block'">
+      <div class="w-[40%] hidden md:block">
         <NuxtLink
           v-if="headerProject"
           class="relative z-[2] text-[12px] uppercase tracking-[.14em] text-white flex items-center gap-2"
@@ -20,21 +20,23 @@
           class="flex flex-col gap-1 justify-center items-center"
           to="/"
         >
-          <div class="h-[80%] flex align-bottom">
+          <div class="h-[100%] sm:h-[80%] flex align-bottom">
             <img
               ref="headerLogoElement"
               :src="displayedHeaderLogo"
               :alt="displayedHeaderLogoAlt"
-              class="w-[120px] md:w-[240px] shadow-sm"
+              class="w-[150px] md:w-[240px] shadow-sm"
             />
           </div>
-          <div class="absolute w-full bottom-[15%] flex justify-center">
+          <div class="absolute w-full bottom-[15%] sm:bottom-[18%] flex justify-center">
+            <transition name="fade">
             <p
-              class="text-white/90 text-[12px] font-medium uppercase tracking-[1px]"
-              v-show="isRivieraPhase"
+              class="text-white/90 text-[12px] font-medium uppercase tracking-[1.25px]"
+              v-if="isRivieraPhase"
             >
               {{ phaseNumber }}
             </p>
+            </transition>
           </div>
         </NuxtLink>
       </div>
@@ -42,7 +44,7 @@
       <div class="w-[40%] flex justify-end h-full flex p-0 items-center">
         <button
           v-if="!isNotFront"
-          class="bg-transparent border border-white/30 hover:border-white/70 text-[#fff] text-[.7rem] md:text-[.85rem] h-8 md:h-12 px-2 md:px-4 tracking-[.1rem] rounded-0 uppercase transition duration-300"
+          class="bg-transparent border border-white/30 hover:border-white/70 text-[#fff] text-[.7rem] md:text-[.85rem] h-12 md:h-12 px-2 md:px-4 tracking-[.1rem] rounded-0 uppercase transition duration-300"
           type="button"
           @click="openLink(meredBrokerLink)"
         >
