@@ -9,23 +9,34 @@
           class="relative z-[2] text-[12px] uppercase tracking-[.14em] text-white flex items-center gap-2"
           :to="isRivieraPhase ? '/projects/riviera' : '/'"
           ><span class="text-[18px] pr-2 h-8">←</span>
-          <span>{{ isRivieraPhase ? "All phases" : "All projects" }}</span></NuxtLink
+          <span>{{
+            isRivieraPhase ? "All phases" : "All projects"
+          }}</span></NuxtLink
         >
       </div>
 
-      <div class="flex flex-col gap-1 justify-center items-center pt-2">
-        <NuxtLink class="" to="/">
-          <div class="h-24 flex align-bottom">
+      <div class="flex flex-col gap-1 justify-center items-center pt-2 h-full">
+        <NuxtLink
+          class="flex flex-col gap-1 justify-center items-center"
+          to="/"
+        >
+          <div class="h-[80%] flex align-bottom">
             <img
               ref="headerLogoElement"
               :src="displayedHeaderLogo"
               :alt="displayedHeaderLogoAlt"
-              class="w-[120px] md:w-[200px] shadow-sm"
+              class="w-[120px] md:w-[240px] shadow-sm"
             />
           </div>
-          <!-- <p class="text-white/50 text-sm tracking-wider" v-if="!headerProject">Brokers Kit</p> -->
+          <div class="absolute w-full bottom-[15%] flex justify-center">
+            <p
+              class="text-white/90 text-[12px] font-medium uppercase tracking-[1px]"
+              v-show="isRivieraPhase"
+            >
+              {{ phaseNumber }}
+            </p>
+          </div>
         </NuxtLink>
-        
       </div>
 
       <div class="w-[40%] flex justify-end h-full flex p-0 items-center">
@@ -73,8 +84,6 @@
       >
         <img src="assets/img/mered-logo2.svg" alt="" class="w-[135px]" />
       </div>
-
-
     </footer>
   </div>
 </template>
@@ -90,14 +99,31 @@ import { Send } from "lucide-vue-next";
 const menuOpen = ref(false);
 const route = useRoute();
 const headerLogoElement = ref<HTMLImageElement | null>(null);
-const meredBrokerLink = 'https://mered.ae/broker'
+const meredBrokerLink = "https://mered.ae/broker";
 
-const isRivieraPhase = computed(() => /^\/projects\/riviera\/phase[12]\/?$/.test(route.path));
-const headerSlug = computed(() => route.path.startsWith("/projects/riviera")
-  ? "riviera"
-  : typeof route.params.slug === "string" ? route.params.slug : "");
-const { data: headerProjects } = await useFetch<Project[]>("/api/projects", { default: () => [] });
-const headerProject = computed(() => headerProjects.value.find(project => project.slug === headerSlug.value) ?? null);
+const phase = computed(() => String(route.params.phase));
+const phaseNumber = computed(() =>
+  phase.value === "phase1" ? "Phase 1" : "Phase 2",
+);
+
+const isRivieraPhase = computed(() =>
+  /^\/projects\/riviera\/phase[12]\/?$/.test(route.path),
+);
+const headerSlug = computed(() =>
+  route.path.startsWith("/projects/riviera")
+    ? "riviera"
+    : typeof route.params.slug === "string"
+      ? route.params.slug
+      : "",
+);
+const { data: headerProjects } = await useFetch<Project[]>("/api/projects", {
+  default: () => [],
+});
+const headerProject = computed(
+  () =>
+    headerProjects.value.find((project) => project.slug === headerSlug.value) ??
+    null,
+);
 
 const headerLogo = computed(() => headerProject.value?.logo2 ?? meredLogo);
 const headerLogoAlt = computed(() => headerProject.value?.name ?? "MERED");
@@ -116,18 +142,23 @@ watch(
   },
 );
 
-watch(headerLogo, async (nextLogo, previousLogo) => {
-  if (nextLogo === previousLogo) {
-    return;
-  }
+watch(headerLogo, async (nextLogo, previousLogo, onCleanup) => {
+  if (nextLogo === previousLogo) return;
 
+  const nextLogoAlt = headerLogoAlt.value;
   const logoElement = headerLogoElement.value;
 
   if (!logoElement) {
     displayedHeaderLogo.value = nextLogo;
-    displayedHeaderLogoAlt.value = headerLogoAlt.value;
+    displayedHeaderLogoAlt.value = nextLogoAlt;
     return;
   }
+
+  let cancelled = false;
+  onCleanup(() => {
+    cancelled = true;
+    gsap.killTweensOf(logoElement);
+  });
 
   await gsap.to(logoElement, {
     autoAlpha: 0,
@@ -136,10 +167,13 @@ watch(headerLogo, async (nextLogo, previousLogo) => {
     ease: "power2.in",
   });
 
+  if (cancelled) return;
+
   displayedHeaderLogo.value = nextLogo;
-  displayedHeaderLogoAlt.value = headerLogoAlt.value;
+  displayedHeaderLogoAlt.value = nextLogoAlt;
 
   await nextTick();
+  if (cancelled) return;
 
   gsap.fromTo(
     logoElement,

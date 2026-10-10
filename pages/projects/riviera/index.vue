@@ -3,8 +3,8 @@
     <section class="relative isolate min-h-[600px] h-[calc(100svh-100px)] overflow-hidden bg-[#252828] text-white md:h-[calc(100svh-145px)] md:min-h-[480px]" aria-label="Choose Riviera Residences phase">
       <img :src="background" alt="Riviera Residences waterfront" class="absolute inset-0 -z-20 h-full w-full object-cover" fetchpriority="high" />
       <div class="absolute inset-0 -z-10 bg-black/35" />
-      <div class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
-        <img :src="project.logo" alt="Riviera Residences" class="w-[60vw] max-w-[420px] drop-shadow-lg md:w-[28vw]" />
+      <div class="pointer-events-none absolute inset-0 z-10 flex items-start justify-center">
+        <img :src="project.logo" alt="Riviera Residences" class="mt-[25vh] w-[60vw] max-w-[420px] drop-shadow-lg md:w-[28vw]" />
       </div>
       <div class="grid h-full grid-rows-2 md:grid-cols-2 md:grid-rows-1">
         <NuxtLink v-for="phase in [1, 2]" :key="phase" :to="`/projects/riviera/phase${phase}`"
