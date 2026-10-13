@@ -1,7 +1,7 @@
 <template>
   <main>
 
-    <section class="h-[calc(100dvh-155px)] bg-[#252828] ">
+    <section class="h-[calc(100dvh-155px)] bg-[#252828] " :class="{'pt-[50px]': slug !== 'iconic'}">
       <div class="grid h-full grid-cols-1 md:grid-cols-12 md:auto-rows-fr gap-0 md:gap-4 px-[2vw]">
         <button
           v-for="(material, index) in project.materials"

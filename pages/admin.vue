@@ -85,6 +85,12 @@
               v-model="selectedProject[field.key]"
               class="h-10 border border-black/15 px-3"
             />
+            <img
+              v-if="selectedSlug === 'riviera' && (field.key === 'image' || field.key === 'phaseSelectionImage')"
+              :src="selectedProject[field.key] || '/images/riviera/main.jpg'"
+              :alt="field.label"
+              class="mt-2 aspect-video w-full object-cover"
+            />
             <input
               v-if="isProjectUploadField(field.key)"
               class="text-sm file:mr-3 file:h-9 file:border-0 file:bg-[#171816] file:px-3 file:text-xs file:uppercase file:tracking-[.12em] file:text-white"
@@ -333,9 +339,16 @@ const projectFields: ProjectField[] = [
   { key: "logo2", label: "Logo 2" },
 ];
 
-const visibleProjectFields = computed(() => selectedSlug.value === "riviera"
-  ? [...projectFields, { key: "phaseSelectionImage" as const, label: "Phase selection background" }]
-  : projectFields);
+const visibleProjectFields = computed<ProjectField[]>(() => {
+  if (selectedSlug.value !== "riviera") return projectFields;
+
+  return projectFields.flatMap((field): ProjectField[] => field.key === "image"
+    ? [
+        { key: "image", label: "Homepage image (/)" },
+        { key: "phaseSelectionImage", label: "Riviera phase selection image (/projects/riviera)" },
+      ]
+    : [field]);
+});
 
 const materialFields: MaterialField[] = [
   { key: "title", label: "Title" },

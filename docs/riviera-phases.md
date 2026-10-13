@@ -17,9 +17,11 @@ into Phase 2 once, leaving its material links empty. Re-running it preserves
 all existing edits and does not duplicate materials. Phase 1 is unchanged.
 
 In Admin → Projects:
-- Select `Riviera — Phase 1 & phase selection` and upload `Phase selection background`,
-  then click `Save project`. This background is independent of the homepage hero;
-  until uploaded, the selector uses the existing Riviera hero.
+- Select `Riviera — Phase 1 & phase selection`. Use `Homepage image (/)` for the
+  homepage card and `Riviera phase selection image (/projects/riviera)` for the
+  selection screen, then click `Save project`. Each field has its own upload and
+  preview. Until uploaded, the selector uses the static `/images/riviera/main.jpg`
+  placeholder, independently of the homepage image.
 - Select `RIVIERA RESIDENCES Phase 2` to upload each material image and set its
   `File/link URL`, then click `Save` on each material.
 - Device mockups are part of the uploaded material image, as in Phase 1.

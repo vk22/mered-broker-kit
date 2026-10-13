@@ -25,13 +25,13 @@
               ref="headerLogoElement"
               :src="displayedHeaderLogo"
               :alt="displayedHeaderLogoAlt"
-              class="w-[150px] md:w-[240px] shadow-sm"
+              class="w-[150px] md:w-[220px] shadow-sm"
             />
           </div>
-          <div class="absolute w-full bottom-[15%] sm:bottom-[18%] flex justify-center">
+          <div class="absolute w-full -bottom-[12%] md:-bottom-[12%] flex justify-center">
             <transition name="fade">
             <p
-              class="text-white/90 text-[12px] font-medium uppercase tracking-[1.25px]"
+              class="title-sans-serif-r text-white/90 text-[12px] md:text-[14px] font-medium tracking-[1.25px] uppercase"
               v-if="isRivieraPhase"
             >
               {{ phaseNumber }}
@@ -44,7 +44,7 @@
       <div class="w-[40%] flex justify-end h-full flex p-0 items-center">
         <button
           v-if="!isNotFront"
-          class="bg-transparent border border-white/30 hover:border-white/70 text-[#fff] text-[.7rem] md:text-[.85rem] h-12 md:h-12 px-2 md:px-4 tracking-[.1rem] rounded-0 uppercase transition duration-300"
+          class="bg-transparent border border-white/30 hover:border-white/70 text-[#fff] text-[.7rem] md:text-[.85rem] tracking-[.1rem] h-12 md:h-12 px-2 md:px-4 rounded-0 uppercase transition duration-300"
           type="button"
           @click="openLink(meredBrokerLink)"
         >
@@ -105,7 +105,7 @@ const meredBrokerLink = "https://mered.ae/broker";
 
 const phase = computed(() => String(route.params.phase));
 const phaseNumber = computed(() =>
-  phase.value === "phase1" ? "Phase 1" : "Phase 2",
+  phase.value === "phase1" ? "phase 1" : "phase 2",
 );
 
 const isRivieraPhase = computed(() =>

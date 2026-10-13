@@ -11,8 +11,8 @@
         class="absolute inset-0 -z-20 h-full w-full object-cover"
         fetchpriority="high"
       />
-      <div class="absolute inset-0 -z-10 bg-black/35" />
-      <div
+      <div class="absolute inset-0 -z-10 bg-black/20 sm:bg-transparent" />
+      <!-- <div
         class="pointer-events-none absolute inset-0 z-10 flex items-start justify-center"
       >
         <img
@@ -21,22 +21,26 @@
           alt="Riviera Residences"
           class="mt-[25vh] w-[60vw] max-w-[420px] drop-shadow-lg md:w-[28vw]"
         />
-      </div>
+      </div> -->
       <div
-        class="grid h-full grid-cols-1 content-end md:grid-cols-2 md:grid-rows-1"
+        class="grid h-full grid-cols-1 grid-rows-2 content-center md:grid-cols-2 md:grid-rows-1"
       >
         <NuxtLink
           v-for="phase in [1, 2]"
           :key="phase"
           :to="`/projects/riviera/phase${phase}`"
-          class="bg-black/10 group flex items-start justify-center px-5 pt-6 transition-all duration-300 hover:bg-black/25 focus-visible:bg-black/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-white md:items-end md:pb-[12vh] md:pt-0"
-          :class="phase === 2 ? 'items-end pb-20 md:pb-[12vh]' : ''"
+          class="bg-transparent group flex flex-col items-center md:items-start justify-end md:justify-center px-5 py-10 transition-all duration-300 hover:bg-black/10 focus-visible:bg-black/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-white md:items-center"
+          :class="phase === 2 ? 'items-center !justify-start md:!justify-center' : ''"
         >
           <span
-            class="border border-white/40 bg-black/25 px-6 py-4 text-center text-base tracking-[.1rem] backdrop-blur-sm transition-colors group-hover:bg-white group-hover:text-[#252828] md:px-6 md:text-lg uppercase"
+            class="title-sans-serif-l px-6 py-2 text-center text-3xl tracking-[.1rem] transition-colors md:px-6 sm:text-5xl md:text-7xl uppercase"
           >
-            Riviera Residences Phase {{ phase }}
-            <span class="ml-3" aria-hidden="true">→</span>
+            Riviera Residences
+          </span>
+          <span
+            class="title-sans-serif-r px-6 py-2 text-center text-base tracking-[.1rem] transition-colors md:px-6 md:text-lg uppercase"
+          >
+            Phase {{ phase }}
           </span>
         </NuxtLink>
       </div>
@@ -52,7 +56,7 @@ const { data: project } = await useFetch<Project>("/api/projects/riviera");
 if (!project.value) throw createError({ statusCode: 404, statusMessage: "Project not found" });
 
 const background = computed(
-  () => project.value!.phaseSelectionImage || project.value!.image,
+  () => project.value!.phaseSelectionImage || "/images/riviera/main.jpg",
 );
 const projectCards = ref<HTMLElement[]>([])
 

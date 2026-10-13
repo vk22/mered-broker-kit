@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: "TT Commons Pro";
-  src: url("../font/TTCommonsPro-Lt.woff2") format("woff2");
+  src: url("../fonts/TTCommonsPro-Lt.woff2") format("woff2");
   font-style: normal;
   font-weight: 300;
   font-display: swap;
@@ -12,7 +12,7 @@
 
 @font-face {
   font-family: "TT Commons Pro";
-  src: url("../font/TTCommonsPro-Rg.woff2") format("woff2");
+  src: url("../fonts/TTCommonsPro-Rg.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -20,7 +20,7 @@
 
 @font-face {
   font-family: "TT Commons Pro";
-  src: url("../font/TTCommonsPro-Md.woff2") format("woff2");
+  src: url("../fonts/TTCommonsPro-Md.woff2") format("woff2");
   font-style: normal;
   font-weight: 500;
   font-display: swap;
@@ -28,7 +28,7 @@
 
 @font-face {
   font-family: "TT Commons Pro";
-  src: url("../font/TTCommonsPro-Db.woff2") format("woff2");
+  src: url("../fonts/TTCommonsPro-Db.woff2") format("woff2");
   font-style: normal;
   font-weight: 600;
   font-display: swap;
@@ -36,7 +36,7 @@
 
 @font-face {
   font-family: "ABC Helveesti";
-  src: url("../font/ABCHelveesti-Regular.woff2") format("woff2");
+  src: url("../fonts/ABCHelveesti-Regular.woff2") format("woff2");
   font-style: normal;
   font-weight: 400 500;
   font-display: swap;
@@ -44,10 +44,31 @@
 
 @font-face {
   font-family: "ABC Helveesti";
-  src: url("../font/ABCHelveesti-Bold.woff2") format("woff2");
+  src: url("../fonts/ABCHelveesti-Bold.woff2") format("woff2");
   font-style: normal;
   font-weight: 600 700;
   font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chiswick Regular';
+    src: url('../fonts/ChiswickGrotesque-Regular-Web.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+	font-family: 'Chiswick Light';
+	src: url('../fonts/ChiswickSans-Light-Web.woff2') format('woff2');
+	font-weight: 300;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Chiswick Light Italic';
+	src: url('../fonts/ChiswickSans-LightItalic-Web.woff2') format('woff2');
+	font-weight: 300;
+	font-style: italic;
 }
 
 @layer base {
@@ -60,10 +81,25 @@
   }
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active {
   transition: opacity 0.5s ease, transform 0.45s ease;
+}
+.fade-leave-active {
+  transition: opacity 0.25s ease, transform 0.35s ease;
 }
 .fade-enter-from, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
   opacity: 0;
   transform: translateY(4px);
+}
+
+.title-sans-serif-l {
+  font-family: 'Chiswick Light', sans-serif;
+}
+
+.title-sans-serif-r {
+  font-family: 'Chiswick Regular', sans-serif;
+}
+
+.title-sans-serif-i {
+  font-family: 'Chiswick Light Italic', sans-serif;
 }

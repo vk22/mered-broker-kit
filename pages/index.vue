@@ -148,6 +148,7 @@ onMounted(async () => {
     }
   })
 
+
   gsap.set(projectCards.value, {
     autoAlpha: 0,
     y: 20
