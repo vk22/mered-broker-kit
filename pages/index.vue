@@ -16,7 +16,7 @@
             class="relative flex h-full w-full items-center justify-center overflow-hidden "
           >
             <div class="relative z-[999] text-white flex flex-col h-full w-full items-center justify-center text-center">
-              <img :src="`${project.logo}`"alt="" class="w-[40vw] md:w-[20vw]">
+              <img :src="`${project.logo}`"alt="" class="w-[40vw] md:w-[20vw] pb-0 md:pb-40">
               <div class="absolute bottom-0 w-[100vw] flex justify-center flex p-10 md:p-16">
                 <p class="text-md md:text-xl text-center leading-[1.2rem] md:leading-[1.65rem]  px-[1vw] md:px-[35vw]">{{ project.description }}</p>
               </div>

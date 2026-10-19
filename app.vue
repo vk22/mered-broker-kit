@@ -20,12 +20,12 @@
           class="flex flex-col gap-1 justify-center items-center"
           to="/"
         >
-          <div class="h-[100%] sm:h-[80%] flex align-bottom">
+          <div class="h-[100%] flex align-bottom">
             <img
               ref="headerLogoElement"
               :src="displayedHeaderLogo"
               :alt="displayedHeaderLogoAlt"
-              class="w-[150px] md:w-[220px] shadow-sm"
+              class="w-[130px] md:w-[200px] shadow-sm"
             />
           </div>
           <div class="absolute w-full -bottom-[12%] md:-bottom-[12%] flex justify-center">
@@ -84,7 +84,7 @@
       <div
         class="flex leading-none tracking-[.28em] w-full justify-center py-10"
       >
-        <img src="assets/img/mered-logo2.svg" alt="" class="w-[135px]" />
+        <img src="assets/img/mered-logo2.svg" alt="" class="w-[115px] md:w-[125px]" />
       </div>
     </footer>
   </div>

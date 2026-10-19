@@ -31,7 +31,7 @@
 
       <section
         v-if="activeSection === 'projects' && selectedProject"
-        class="grid gap-8 lg:grid-cols-[360px_1fr]"
+        class="grid gap-8"
       >
 
       <div

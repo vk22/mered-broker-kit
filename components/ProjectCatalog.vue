@@ -8,7 +8,7 @@
           :key="material.title"
           :ref="setMaterialCard"
           :class="materialCardClass(index)"
-          class="group relative flex h-[175px] flex-col justify-between cursor-pointer overflow-hidden p-4 sm:p-6 md:p-8 lg:p-8 text-left text-white md:h-full "
+          class="group relative flex h-[175px] flex-col justify-between cursor-pointer overflow-hidden p-4 sm:p-4 md:p-4 lg:p-6 xl:p-6 2xl:p-8 text-left text-white md:h-full "
           type="button"
           @click="openLink(material.fileUrl)"
         >
@@ -43,17 +43,17 @@
 
           <span class="flex flex-col gap-0 md:gap-1 lg:gap-1 pb-0 pr-[50px]">
             <span
-              class="relative z-[1] self-start font-serif fond-bold text-[24px] md:text-[26px] lg:md:text-[32px] xl:text-[38px] leading-[1.15] tracking-[.25px]"
+              class="relative z-[1] self-start font-serif fond-bold text-[24px] md:text-[26px] lg:text-[26px] xl:text-[26px] 2xl:text-[32px] leading-[1.15] tracking-[.25px]"
               >{{ material.title }}</span
             >
             <span
-              class="relative z-[1] self-start font-sans fond-bold text-[16px] md:text-[16px] lg:text-[20px] leading-[1.25] w-[80%] md:w-full "
+              class="relative z-[1] self-start font-sans fond-bold text-[16px] md:text-[16px] lg:text-[16px] xl:text-[16px] 2xl:text-[18px] leading-[1.25] w-[80%] md:w-full "
               >{{ material.subtitle }}</span
             >
           </span>
 
           <span
-            class="absolute right-4 bottom-2 md:right-6 md:bottom-4 lg:bottom-8 z-[1] tracking-[.1em] text-[32px]"
+            class="absolute right-4 md:right-6 bottom-2 md:bottom-4 lg:bottom-4 xl:bottom-6 z-[1] tracking-[.1em] text-[32px]"
             >→</span
           >
           <!-- <span class="absolute right-6 top-[22px] z-[1] text-[22px]">{{ downloaded === material.title ? '✓' : '↓' }}</span> -->
