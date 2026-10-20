@@ -51,7 +51,7 @@
             class="bg-[#faf3e9] border border-white/30 hover:border-white/70 text-[#434848] text-[.7rem] md:text-[.85rem] tracking-[.1rem] h-12 md:h-12 px-8 md:px-12 rounded-0 uppercase transition duration-300"
             type="button"
           >
-            Discover Phase {{ phase }}
+            Phase {{ phase }} Assets
           </button>
         </NuxtLink>
       </div>

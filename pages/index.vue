@@ -46,7 +46,7 @@
         Broker relations
       </p>
       <h2
-        class="mb-[90px] font-serif text-6xl font-medium leading-[.96] tracking-[-.04em] text-center"
+        class="mb-[90px] font-serif text-3xl sm:text-5xl font-medium leading-[.96] tracking-[-.04em] text-center"
       >
         Need additional support?
       </h2>
