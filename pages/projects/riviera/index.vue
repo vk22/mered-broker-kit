@@ -5,25 +5,19 @@
       aria-label="Choose Riviera Residences phase"
     >
       <img
-        :ref="setProjectCard"
+        ref="backgroundImage"
         :src="background"
         alt="Riviera Residences waterfront"
-        class="absolute inset-0 -z-20 h-full w-full object-cover object-bottom"
+        class="riviera-background absolute inset-0 -z-20 h-full w-full object-cover object-bottom"
+        :class="{ 'is-ready': imageReady }"
+        @load="revealImage"
+        decoding="async"
         fetchpriority="high"
       />
       <div class="absolute inset-0 -z-10 bg-black/20 sm:bg-black/10" />
-      <!-- <div
-        class="pointer-events-none absolute inset-0 z-10 flex items-start justify-center"
-      >
-        <img
-          :ref="setProjectCard"
-          :src="project.logo"
-          alt="Riviera Residences"
-          class="mt-[25vh] w-[60vw] max-w-[420px] drop-shadow-lg md:w-[28vw]"
-        />
-      </div> -->
       <div
-        class="grid h-full grid-cols-1 grid-rows-2 content-center md:grid-cols-2 md:grid-rows-1"
+        class="riviera-content grid h-full grid-cols-1 grid-rows-2 content-center md:grid-cols-2 md:grid-rows-1"
+        :class="{ 'is-ready': fontsReady }"
       >
         <NuxtLink
           v-for="phase in [1, 2]"
@@ -60,7 +54,9 @@
 </template>
 
 <script setup lang="ts">
-import { gsap } from "gsap";
+import chiswickLight from "~/assets/fonts/ChiswickSans-Light-Web.woff2?url";
+import chiswickRegular from "~/assets/fonts/ChiswickGrotesque-Regular-Web.woff2?url";
+import commonsRegular from "~/assets/fonts/TTCommonsPro-Rg.woff2?url";
 import type { Project } from "~/data/projects";
 
 const { data: project } = await useFetch<Project>("/api/projects/riviera");
@@ -70,12 +66,20 @@ if (!project.value)
 const background = computed(
   () => project.value!.phaseSelectionImage || "/images/riviera/main.jpg",
 );
-const projectCards = ref<HTMLElement[]>([]);
+const backgroundImage = ref<HTMLImageElement | null>(null);
+const imageReady = ref(false);
+const fontsReady = ref(false);
+let disposed = false;
 
-const setProjectCard = (element: Element | null) => {
-  if (element instanceof HTMLElement) {
-    projectCards.value.push(element);
+const revealImage = async () => {
+  const image = backgroundImage.value;
+  if (!image?.naturalWidth) return;
+  try {
+    await image.decode();
+  } catch {
+    // A loaded image can still be displayed if decoding is unsupported.
   }
+  if (!disposed) imageReady.value = true;
 };
 
 usePageSeo({
@@ -87,24 +91,58 @@ usePageSeo({
   path: "/projects/riviera",
 });
 
-useHead({ link: [{ rel: "preload", as: "image", href: background }] });
+useHead({
+  link: [
+    { rel: "preload", as: "image", href: background, fetchpriority: "high" },
+    ...[chiswickLight, chiswickRegular, commonsRegular].map((href) => ({
+      rel: "preload",
+      as: "font",
+      type: "font/woff2",
+      crossorigin: "anonymous" as const,
+      href,
+    })),
+  ],
+  noscript: [{ innerHTML: "<style>.riviera-background,.riviera-content{opacity:1!important}</style>" }],
+});
 
 onMounted(async () => {
-  await nextTick();
+  // The load event may have fired before hydration when the image is cached.
+  if (backgroundImage.value?.complete) void revealImage();
 
-  console.log("projectCards ", projectCards);
+  if (document.fonts) {
+    await Promise.allSettled([
+      document.fonts.load('300 48px "Chiswick Light"'),
+      document.fonts.load('400 18px "Chiswick Regular"'),
+      document.fonts.load('400 14px "TT Commons Pro"'),
+    ]);
+  }
+  if (!disposed) fontsReady.value = true;
+});
 
-  gsap.set(projectCards.value, {
-    autoAlpha: 0,
-    y: 20,
-  });
-
-  gsap.to(projectCards.value, {
-    autoAlpha: 1,
-    y: 0,
-    duration: 1.25,
-    ease: "power3.out",
-    stagger: 0.15,
-  });
+onBeforeUnmount(() => {
+  disposed = true;
 });
 </script>
+
+<style scoped>
+.riviera-background,
+.riviera-content {
+  opacity: 0;
+  transition: opacity 700ms ease;
+}
+
+.riviera-content {
+  transition-duration: 450ms;
+}
+
+.is-ready {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .riviera-background,
+  .riviera-content {
+    transition: none;
+  }
+}
+</style>
